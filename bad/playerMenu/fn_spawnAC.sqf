@@ -17,6 +17,7 @@ call
 		{
 			_aircraft = createVehicle [_classVeh, _emptyPos, [], 0, "NONE"];
 			_aircraft setDir _aircraftDir;
+			_aircraft engineOn true;
 			_vehName = (getText(configFile >> "cfgVehicles" >> _classVeh>> "displayName"));
 			_posSTR = _i-990;
 			hint format ["You spawned %1 on Pad %2", _vehName, _posSTR];

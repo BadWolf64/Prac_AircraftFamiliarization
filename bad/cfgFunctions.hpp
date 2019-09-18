@@ -6,6 +6,8 @@ class cfgFunctions{
 			class spawnMenu{};
 			class popACListPic{};
 			class autoRot{};
+			class TOL{};
+			class TOLMenu{};
 		};
 	};
 };

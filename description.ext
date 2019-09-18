@@ -24,6 +24,8 @@ onLoadName = "Helicopter Familiarization";
 #include <bad\gui\spawnmenu.hpp>                 //Player spawn AC menu
 #include <bad\gui\autoRotMenu.hpp>                 //Player Heli menu
 #include <bad\gui\autoRotEnable.hpp> 
+#include <bad\gui\TOLMenu.hpp>
+
 
 respawnDelay = 5; // wait 5 seconds to go to spec
 

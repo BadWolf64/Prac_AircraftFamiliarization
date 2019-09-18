@@ -1,13 +1,30 @@
+	trgLZ = createTrigger ["EmptyDetector", getMarkerPos "LandingZone", false];
+	trgLZ setTriggerArea [10,10,0,false,5];
+	trgLZ setTriggerActivation ["ANYPLAYER","PRESENT",true];
+	trgLZ setTriggerStatements ["this","hint 'Congrats'","hint 'Oh just land FFS'"];
+	[trgLZ] call BIS_fnc_drawAO;
+
+if (player getVariable 'TP') then {
+	player setVariable ['TP', false];
+} else 
+{
+	player setVariable ['TP', true];
+};[]
 
 
-//AutoRotate Auto hide    
-ctrlShow[11,false],ctrlShow[12,false],ctrlShow[13,false],ctrlShow[14,false],ctrlShow[15,false]
-//AutoRotate Show         
-ctrlShow[11,true],ctrlShow[12,true],ctrlShow[13,true],ctrlShow[14,true],ctrlShow[15,true],ctrlShow[111,true]
+_enabled = player getVariable ["TOLSwitch"];
+_teleport = player getVariable ["TP"];
+_opposition = player getVariable ["opposition"];
+_typeLZ = player getVariable ["typeLZ"];
+_separator = parseText "-------------------------------------------------------------------------------------";
+parseText format 
+	["<t align='left'>Practice Enabled:</t> <t align='right'>%1</t>
+	<t align='left'>%5</t><br/>
+	<t align='left'>EI in AO:</t> <t align='right'>%2</t>
+	<t align='left'>%5</t><br/>
+	<t align='left'>Teleport to AO:</t> <t align='right'>%3</t>
+	<t align='left'>%5</t><br/>
+	<t align='left'>Typle of LZ:</t> <t align='right'>%4</t>
+	<t align='left'>%5</t><br/>",_enabled,_opposition,_teleport,_typeLZ, _separator]
 
-
-//Open HeliMenu Hide all 
-createDialog "heliMenu",[]call bad_fnc_isPilot,ctrlShow[11,false],ctrlShow[12,false],ctrlShow[13,false],ctrlShow[14,false],ctrlShow[15,false],ctrlShow[112,false],ctrlShow[113,false],ctrlShow[114,false],ctrlShow[115,false],ctrlShow[116,false]
-
-//If not Pilot - Auto Rotation Options
-ctrlShow[112,true],ctrlShow[113,true],ctrlShow[114,true],ctrlShow[115,true],ctrlShow[116,true]
+	ctrl 168012587
