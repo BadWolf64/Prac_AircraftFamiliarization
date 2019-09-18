@@ -2,9 +2,7 @@ _enabled = player getVariable "TOLSwitch";
 _teleport = player getVariable "TP";
 _opposition = player getVariable "opposition";
 _typeLZ = player getVariable "typeLZ";
-
 _textCbo = ((findDisplay 995) displayCtrl (20));
-
 _separator = parseText "-------------------------------------";
 _textCbo ctrlSetStructuredText parseText format 
 	["<t align='left'>Practice Enabled:</t> <t align='right'>%1</t>

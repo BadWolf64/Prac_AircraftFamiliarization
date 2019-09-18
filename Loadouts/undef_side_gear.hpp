@@ -1,4 +1,4 @@
-// Reset side defines
+
 #ifdef SIDE_KEY
   #undef SIDE_KEY
 #endif

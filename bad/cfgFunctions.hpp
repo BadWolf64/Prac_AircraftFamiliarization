@@ -8,6 +8,8 @@ class cfgFunctions{
 			class autoRot{};
 			class TOL{};
 			class TOLMenu{};
+			class logi{};
+			class logiMenu{};
 		};
 	};
 };

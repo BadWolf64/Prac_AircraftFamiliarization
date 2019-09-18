@@ -1,36 +1,17 @@
 onLoadName = "Helicopter Familiarization";
-
-/* enableDebugConsole = 2;    //note security risk
-EnableTargetDebug = 1;
-allowFunctionsRecompile = 1; */
-
-// BWMF Gear
-//Credits:headswe, Pabst, Zerith
 #include "CfgLoadouts.hpp"
-
-// Extended Event Handlers:
 #include "cfg\CfgEventHandlers.hpp"
-
-// Parameters
 #include "cfg\Params.hpp"
-
-// ACE/Potato settings
 #include "cfg\ACE_Settings.hpp"
-
-// BadWolf Menu
-
-#include <bad\cfgFunctions.hpp>         //bad function definitions
-#include <bad\gui\CustomControlClasses.hpp>       //Control Classes
-#include <bad\gui\spawnmenu.hpp>                 //Player spawn AC menu
-#include <bad\gui\autoRotMenu.hpp>                 //Player Heli menu
+#include <bad\cfgFunctions.hpp>         
+#include <bad\gui\CustomControlClasses.hpp>       
+#include <bad\gui\spawnmenu.hpp>                 
+#include <bad\gui\autoRotMenu.hpp>                 
 #include <bad\gui\autoRotEnable.hpp> 
 #include <bad\gui\TOLMenu.hpp>
-
-
-respawnDelay = 5; // wait 5 seconds to go to spec
-
-bwmfDate = "2019/03/05"; //Framework date
-
+#include <bad\gui\slingMenu.hpp>
+respawnDelay = 5; 
+bwmfDate = "2019/03/05"; 
 class CfgDebriefingSections {
   class acex_killTracker {
     title = "ACEX Killed Events";

@@ -1,13 +1,10 @@
 #define LINESPACING 1
-
 #include "CustomControlClasses.hpp"
-//Auto rotation activation menu. 
 class autoRotEnable
 {
 	idd = 996;
 	movingEnable = true;
 	enableSimulation = true;
-	
 	class ControlsBackground
 	{
 		class Background
@@ -24,9 +21,7 @@ class autoRotEnable
 			colorText[] = {1,1,1,1};
 			font = "PuristaMedium";
 			sizeEx = (((((safezoneW / safezoneH) min 1.2) / 1.2) / 25) * 1);
-			
 		};
-		
 	};
 	class Controls
 	{
@@ -40,7 +35,6 @@ class autoRotEnable
 			h = safeZoneH * 0.05;
 			text = "Enable/Disable";
 			onButtonClick = "[1] call bad_fnc_autoRot";
-			
 		};
 		class _soloEnable : MenuItem 
 		{
@@ -52,9 +46,6 @@ class autoRotEnable
 			h = safeZoneH * 0.05;
 			text = "Enable/Disable Solo";
 			onButtonClick = "[5] call bad_fnc_autoRot";
-			
 		};
-		
 	};
-	
 };

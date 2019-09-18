@@ -1,5 +1,4 @@
 setViewDistance 2500;
-//This should be tidied up into either the string table or a seperate .hpp
 player createDiarySubject ["autoRot","AUTOROTATION"];
 player createDiaryRecord ["autoRot", ["Tips and Tricks", "I will get around to filling this up.... eventually."]];
 player createDiaryRecord ["autoRot", ["Solo Practice", "Once you have enabled the Autorotation Practice you will be able to enable the solo practice in the <marker name='autoRotMenu'>Autorotation Practice</marker> Menu.<br/><br/>This means that you are able to go about practicing your autorotations without the requirement that someone else in the Helicopter triggers it. <br/><br/>This is a random occurance. Once you get into the Heli, you will need to climb to 75m. Anywhere between 15 secs and 90 secs the damage will be applied. The damage will be to the engine OR both the engine and anti-troque system.<br/><br/>Once you have successfully landed, you will need to exit the heli and then get back in to repair any damage (to the heli and yourself).<br/><br/>Remember --- Any landing you can walk away from is a successful landing!!!"]];
