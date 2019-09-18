@@ -24,6 +24,7 @@ allowFunctionsRecompile = 1;
 #include <bad\gui\CustomControlClasses.hpp>       //Control Classes
 #include <bad\gui\spawnmenu.hpp>                 //Player spawn AC menu
 #include <bad\gui\autoRotMenu.hpp>                 //Player Heli menu
+#include <bad\gui\autoRotEnable.hpp> 
 //#include <stringtable.xml>                        //Stringtable for Text
 
 respawnDelay = 5; // wait 5 seconds to go to spec
