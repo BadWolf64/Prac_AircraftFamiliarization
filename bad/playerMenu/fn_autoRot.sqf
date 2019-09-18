@@ -16,41 +16,73 @@ _playerVeh = vehicle Player;
 
 //Functions
 
-	//Randomisers for Solo Practice
-
-_engineDMGrand = {};
-_bothDMGrand = {};
-
 	// Create Functions to Enable/Disable Switches
 
-_autoRotActive = {
-	if (_autoRotSwitchL) then
+autoRotActive = {
+	params["_autoRotSwitchL"];
+
+	private _active = (_this select 0);
+	
+	if (_active) then
 	{
 		player setVariable["autoRotSwitch", false];
 		hint "Autorotaion Menu Disabled";
 		player removeEventHandler ["GetInMan",0];
-		player removeEventHandler ["GetOutMan",0];
-		removeAllActions player;
+		player setVariable["autoRotSolo", false];	
 	} else {
 		player setVariable["autoRotSwitch", true];
 		hint "Autorotaion Menu Enabled";
-		player addEventHandler ["GetInMan",{if ((_this select 1) != ("driver")) then {(_this select 0) addAction ["Autorotation Menu", {createDialog "autoRotMenu"}];};}];
-		player addEventHandler ["GetOutMan",{removeAllActions (_this select 0);}];
 	};	
 };
-_soloActive = {
-	if (_autoRotSwitchL && _soloSwitchL) then
-	{
-		player setVariable["autoRotSolo", false];
-		hint "Solo Practice Disabled";
-		player removeEventHandler ["GetInMan",1];
-	} else {
-		player setVariable["autoRotSwitch", true];
-		hint "Solo Practice Enabled";
-	// EH will trigger when player gets is the vehicle - it heals the player and repairs the vic and also triggers the timer for starting the autorotation.
-		player addEventHandler ["GetInMan",{if ((_this select 1) == ("driver")) then {};}];
-	};	
+soloActive = {
+	params["_autoRotSwitchL","_soloSwitchL"];
+
+	private _active = (_this select 0);
+	private _soloActive = (_this select 1);
+
+	if (_active) then{
+		if (_soloActive) then
+		{
+			player setVariable["autoRotSolo", false];
+			hint "Solo Practice Disabled";
+			player removeEventHandler ["GetInMan",0];
+		} else {
+			player setVariable["autoRotSolo", true];
+			hint "Solo Practice Enabled";
+			player addEventHandler ["GetInMan",{if ((_this select 1) == ("driver")) then {[] call soloFunction;};}];
+		};	
+	} else{
+		hint "Autorotation Practice is not Enabled";
+	};
 };
+
+//Function that controls Solo Practice
+
+soloFunction = {
+
+	private _timeToWait = random [15, 30 ,90];
+	private _selectDMG = selectRandom [1,2];
+	// private _ATL = getPosATL vehicle player select 2;
+
+	["bad_repair", [vehicle player], vehicle player] call CBA_fnc_targetEvent;
+
+	hint "Get above 75m";
+	
+	[_selectDMG,_timeToWait] spawn {	
+		params ["_selectDMG","_timeToWait"];
+		waitUntil{
+			private _alt = getPosATL vehicle player select 2;
+			(_alt > 75)
+			};
+		sleep _timeToWait;
+		if(_selectDMG == 1) then {
+		["bad_engineDMG", [vehicle player], vehicle player] call CBA_fnc_targetEvent;
+		} else {
+		["bad_bothDMG", [vehicle player], vehicle player] call CBA_fnc_targetEvent;
+		};
+	};
+};
+
 
 //Create Event Handlers
 
@@ -79,9 +111,11 @@ _soloActive = {
 // Switch Cases depending on what is passed into the function. 
 
 switch _case do {
-	case 1: _autoRotActive;
+	case 1: {[_autoRotSwitchL] call autoRotActive;};
 	case 2: {if (_autoRotSwitchL) then {["bad_engineDMG", [_playerVeh], _playerVeh] call CBA_fnc_targetEvent;};};
 	case 3: {if (_autoRotSwitchL) then {["bad_bothDMG", [_playerVeh], _playerVeh] call CBA_fnc_targetEvent;};};
 	case 4: {if (_autoRotSwitchL) then {["bad_repair", [_playerVeh], _playerVeh] call CBA_fnc_targetEvent;};};
-	case 5: _soloActive;
+	case 5: {[_autoRotSwitchL,_soloSwitchL] call soloActive;};
 };
+
+

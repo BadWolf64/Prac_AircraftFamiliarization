@@ -14,16 +14,17 @@ class autoRotMenu
 		{
 			type = 0;
 			idc = 0;
-			x = safeZoneX + safeZoneW * 0.44375;
-			y = safeZoneY + safeZoneH * 0.33222223;
-			w = safeZoneW * 0.1425;
-			h = safeZoneH * 0.32;
+			x = safeZoneX + safeZoneW * 0.43875;
+			y = safeZoneY + safeZoneH * 0.30777778;
+			w = safeZoneW * 0.1475;
+			h = safeZoneH * 0.34444445;
 			style = 0;
 			text = "";
 			colorBackground[] = {0,0,0,0.25};
 			colorText[] = {1,1,1,1};
 			font = "PuristaMedium";
 			sizeEx = (((((safezoneW / safezoneH) min 1.2) / 1.2) / 25) * 1);
+			moving = true;
 			
 		};
 		

@@ -6,8 +6,6 @@ class cfgFunctions{
 			class spawnMenu{};
 			class popACListPic{};
 			class autoRot{};
-			class isPilot{};
-			class autoRotMenu{};
 		};
 	};
 };
