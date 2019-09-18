@@ -1,6 +1,6 @@
 class CfgLoadouts {
   // Use POTATO to run gear assignment
-  usePotato = 0;
+  usePotato = 1;
 
   // Fast, Easy Settings to change loadouts without touching the arrays.  For TVT Balancing.
   // Allow Zoomed Optics (1 is true, 0 is false) <Anything like a HAMR (4x) optic won't be added, "red dot" would be fine>

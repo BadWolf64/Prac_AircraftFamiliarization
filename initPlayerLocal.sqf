@@ -2,7 +2,7 @@ player setVariable ["autoRotSwitch", false];
 player setVariable ["autoRotSolo", false];
 player setVariable ["TOLSwitch", false];
 player setVariable ["opposition", false];
-player setVariable ["typeLZ",""];
+player setVariable ["typeLZ","OLZ"];
 player setVariable ["TP",false];
 player setVariable ["inProgress",false];
 	//Create ACEaddAction

@@ -1,8 +1,8 @@
 onLoadName = "Helicopter Familiarization";
 
-//enableDebugConsole = 2;    //note security risk
-//EnableTargetDebug = 1;
-//allowFunctionsRecompile = 1;
+/* enableDebugConsole = 2;    //note security risk
+EnableTargetDebug = 1;
+allowFunctionsRecompile = 1; */
 
 // BWMF Gear
 //Credits:headswe, Pabst, Zerith
