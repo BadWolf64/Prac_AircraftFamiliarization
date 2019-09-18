@@ -14,17 +14,16 @@ class autoRotMenu
 		{
 			type = 0;
 			idc = 0;
-			x = safeZoneX + safeZoneW * 0.79875;
-			y = safeZoneY + safeZoneH * 0.56777778;
-			w = safeZoneW * 0.1475;
-			h = safeZoneH * 0.34444445;
+			x = safeZoneX + safeZoneW * 0.44375;
+			y = safeZoneY + safeZoneH * 0.33222223;
+			w = safeZoneW * 0.1425;
+			h = safeZoneH * 0.32;
 			style = 0;
 			text = "";
 			colorBackground[] = {0,0,0,0.25};
 			colorText[] = {1,1,1,1};
 			font = "PuristaMedium";
 			sizeEx = (((((safezoneW / safezoneH) min 1.2) / 1.2) / 25) * 1);
-			moving = true;
 			
 		};
 		
@@ -35,8 +34,8 @@ class autoRotMenu
 		{
 			type = 1;
 			idc = 11;
-			x = safeZoneX + safeZoneW * 0.80875;
-			y = safeZoneY + safeZoneH * 0.60111112;
+			x = safeZoneX + safeZoneW * 0.44875;
+			y = safeZoneY + safeZoneH * 0.34111112;
 			w = safeZoneW * 0.1325;
 			h = safeZoneH * 0.05;
 			text = "Enable/Disable";
@@ -47,8 +46,8 @@ class autoRotMenu
 		{
 			type = 1;
 			idc = 12;
-			x = safeZoneX + safeZoneW * 0.80875;
-			y = safeZoneY + safeZoneH * 0.66111112;
+			x = safeZoneX + safeZoneW * 0.44875;
+			y = safeZoneY + safeZoneH * 0.40111112;
 			w = safeZoneW * 0.1325;
 			h = safeZoneH * 0.05;
 			text = "Engine Only";
@@ -59,8 +58,8 @@ class autoRotMenu
 		{
 			type = 1;
 			idc = 13;
-			x = safeZoneX + safeZoneW * 0.80875;
-			y = safeZoneY + safeZoneH * 0.72111112;
+			x = safeZoneX + safeZoneW * 0.44875;
+			y = safeZoneY + safeZoneH * 0.46111112;
 			w = safeZoneW * 0.1325;
 			h = safeZoneH * 0.05;
 			text = "Engine & Tail Rotor Loss";
@@ -71,8 +70,8 @@ class autoRotMenu
 		{
 			type = 1;
 			idc = 14;
-			x = safeZoneX + safeZoneW * 0.80875;
-			y = safeZoneY + safeZoneH * 0.78111112;
+			x = safeZoneX + safeZoneW * 0.44875;
+			y = safeZoneY + safeZoneH * 0.52111112;
 			w = safeZoneW * 0.1325;
 			h = safeZoneH * 0.12;
 			text = "Repair";
