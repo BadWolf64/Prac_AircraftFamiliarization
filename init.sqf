@@ -8,3 +8,15 @@ player createDiaryRecord ["tolMenu",["Tips and Tricks","If at any point you need
 player createDiaryRecord ["tolMenu",["Take Off","After you have been given the prompt to leave the LZ, the next LZ will only be assigned after you move out of the AO. This is 500m didstance."]];
 player createDiaryRecord ["tolMenu",["Landing","When Landing make sure and get as close to the LZ as possible. You will only get the prompt to take off when you are within 50m of the LZ. This should be kept in mind if you plan on doing formation plandings as the lead pilot should within that 50m."]];
 player createDiaryRecord ["tolMenu",["The Practice Menu","Open the menu at the laptop in the starting area. <marker name='landingMenu'>Take off and Landing</marker><br/><br/>This menu will allow you to set up the practice that you want to carry out. The default practice is Open Landing Zonce with no opposition and not teleport to the LZ AO. <br/><br/> OPPOSITION: If you enable opposition, it will spawn 2 groups of EI that will spawn at 2 random locations within the AO.<br/><br/>TELEPORT: If enabled you will be spawned at a random location on a radius of roughly 2km form the LZ. If diabled you will be required to fly to the LZ from your current position.<br/><br/>OPEN and CLOSED LZ: Open LZ's are a little less challenging than the Tight LZs. They are good for practicing formation landings or if you are very new to Helis. Tight LZs are more meant for a single ship and are generally for the more advanced pilot.<br/><br/>GROUP PRACTICE: If you plan on practicing LZ's as a group, only the lead pilot need enable the menu otherwise all other pilots will be assigned different LZ's. Also do not enable Teleport as only the lead pilot will be teleported and everyone else will have to move to the lead pilots position."]];
+if (hasInterface) then {
+    [] spawn {
+        waitUntil {alive player};
+        player addEventHandler ["Respawn", {
+            [] spawn {
+                sleep 0.5;
+                systemChat "you are respawned and will get gear set";
+                [player] call potato_assignGear_fnc_assignGearMan;
+            };
+        }];
+    };
+};
