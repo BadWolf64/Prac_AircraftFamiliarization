@@ -1,1 +1,0 @@
-#include "..\core\script_component.hpp"
