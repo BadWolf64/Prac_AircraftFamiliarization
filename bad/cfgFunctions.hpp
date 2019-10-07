@@ -8,7 +8,8 @@ class cfgFunctions{
 			class repairVic{};
 			class setupAO{};
 			class spawnVic{};
-			class teleportToAO{};
+			class teleport{};
+			class rearm{};
 		};
 		class autoRotation{
 			file = "bad\autoRotation\functions";

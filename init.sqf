@@ -20,3 +20,7 @@ if (hasInterface) then {
         }];
     };
 };
+
+[] call bad_fnc_fullHeal;
+[] call bad_fnc_rearm;
+[] call bad_fnc_repairVic;
