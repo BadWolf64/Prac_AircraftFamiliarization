@@ -1,5 +1,5 @@
 //For testing ONLY
-enableDebugConsole = 2;    
+enableDebugConsole = 2;
 EnableTargetDebug = 1;
 allowFunctionsRecompile = 1;
 
@@ -8,13 +8,9 @@ onLoadName = "Helicopter Familiarization";
 #include "cfg\CfgEventHandlers.hpp"
 #include "cfg\Params.hpp"
 #include "cfg\ACE_Settings.hpp"
-#include <bad\cfgFunctions.hpp>         
-#include <bad\gui\CustomControlClasses.hpp>       
-#include <bad\gui\spawnmenu.hpp>                 
-#include <bad\gui\autoRotMenu.hpp>                 
-#include <bad\gui\autoRotEnable.hpp> 
-#include <bad\gui\TOLMenu.hpp>
-#include <bad\gui\slingMenu.hpp>
+#include "bad\cfgFunctions.hpp"
+
+
 respawnDelay = 5; 
 bwmfDate = "2019/03/05"; 
 class CfgDebriefingSections {
