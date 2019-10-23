@@ -2,8 +2,9 @@
 
 FUNC(targetRepair) = {
 	params["_target"];
-	_target setDamage 0;
-	_target setFuel 1;
+	private _playerVic = vehicle _target;
+	_playerVic setDamage 0;
+	_playerVic setFuel 1;
 };
 
 FUNC(repair) = {
@@ -17,8 +18,7 @@ FUNC(repair) = {
 		TRACE_1("Vehicle Repaired: ", _playerVic);
 	} else {
 
-		TRACE_1("Repair attempted, not in vehicle", name player);
-
+		TRACE_1("Repair attempted, not in vehicle", name _player);
 		False;
 	};
 };

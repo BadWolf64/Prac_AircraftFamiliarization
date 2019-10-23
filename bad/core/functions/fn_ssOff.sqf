@@ -2,8 +2,13 @@
 
 FUNC(toggleSS) = {
 
-if !(isServer) exitWith {};
+	params ["_value"];
 
-[false] call potato_safestart_fnc_togglesafestart;
+	if !(isServer) exitWith {};
 
+	private _ssEnabled =  missionNamespace getVariable ["potato_safestart_enabled",-1];
+
+	if (_ssEnabled) then {
+		[_value] call potato_safestart_fnc_togglesafestart;
+	};
 };

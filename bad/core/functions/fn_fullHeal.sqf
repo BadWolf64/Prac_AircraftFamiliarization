@@ -5,9 +5,9 @@ FUNC(targetHeal) = {
 	[QACEGVAR(medical_treatment,fullHealLocal), [_target, _target], _target] call CBA_fnc_targetEvent;
 };
 
-
 FUNC(fullHeal) = {
-	private _playerVic = vehicle player;
+	params ["_target"];
+	private _playerVic = vehicle _target;
 
 	TRACE_1("Player Vehicle: ", _playerVic);
 
@@ -20,8 +20,9 @@ FUNC(fullHeal) = {
 
 		} forEach _listCrew;
 	} else {
-		[player] call FUNC(targetHeal);
+		[_target] call FUNC(targetHeal);
 
-		TRACE_1("Unit Healed: ", player);
+		TRACE_1("Unit Healed: ", _target);
 	};
 };
+
