@@ -19,3 +19,9 @@ class CfgDebriefingSections {
     variable = "acex_killTracker_outputText";
   };
 };
+
+class mainMenu {
+	idd = 9999;
+	movingEnable = false;
+	enableSimulation = true;
+};

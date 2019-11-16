@@ -6,8 +6,7 @@ FUNC(targetHeal) = {
 };
 
 FUNC(fullHeal) = {
-	params ["_target"];
-	private _playerVic = vehicle _target;
+	private _playerVic = vehicle player;
 
 	TRACE_1("Player Vehicle: ", _playerVic);
 
@@ -20,9 +19,8 @@ FUNC(fullHeal) = {
 
 		} forEach _listCrew;
 	} else {
-		[_target] call FUNC(targetHeal);
+		[player] call FUNC(targetHeal);
 
-		TRACE_1("Unit Healed: ", _target);
+		TRACE_1("Unit Healed: ", player);
 	};
 };
-
