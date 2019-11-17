@@ -22,6 +22,7 @@ FUNC(activeMenu) = {
 		};
 
 	[] call FUNC(clearMenu);
+	[] call FUNC(contextualOk);
 
 	switch _menu do {
 		case 0: {
@@ -45,11 +46,59 @@ FUNC(clearMenu) = {
 				_ctrls pushBack _i; 
 			}; 
 		}; 
-	}; 
-	{ctrlDelete ((findDisplay 9999) displayCtrl _x)} forEach _ctrls;
+	};
+	{
+		private _ctrl = (findDisplay 9999) displayCtrl _x; 
+		_ctrl ctrlRemoveAllEventHandlers "LBSelChanged";
+		_ctrl ctrlRemoveAllEventHandlers "CheckedChanged";
+		_ctrl ctrlRemoveAllEventHandlers "SliderPosChanged";
+		ctrlDelete _ctrl;
+	} forEach _ctrls;
+};
+
+FUNC(playerList) = {
+
+	params["_display","_idc"];
+
+	private _playerList = if (time > 120) then {
+        (allPlayers - (entities "HeadlessClient_F"))
+    } else {
+        ((entities [["CAManBase"], ["HeadlessClient_F"], true, true]) select { isPlayer _x })
+    };
+
+	private _playersLB = _display displayCtrl (_idc);
+
+	lbCLear _playersLB;
+	{
+		private _playerNameStr = name _x;
+		private _index = _playersLB lbAdd _playerNameStr;
+		_playersLB lbSetData [_index,[_x] call BIS_fnc_objectVar];
+		_playersLB lbsetToolTip [_index,[_x] call BIS_fnc_objectVar];
+	} forEach _playerList;
+
 };
 
 FUNC(contextualOk) = {
+	params["_menu"];
+
+	private _display = findDisplay 9999;
+	private _menuOK = _display displayCtrl (9990);
+
+	_menuOK ctrlSetText "Ok";
+	_menuOK buttonSetAction "";
+	_menuOK ctrlCommit 0;
+
+		switch _menu do {
+		case 0: {
+			//do nothing for now.
+		};
+		case 1: {
+			;
+		};
+		case 2: {
+			//I will get to it. 
+		};
+	};
 
 };
 
@@ -78,6 +127,7 @@ FUNC(mainMenuFrame) = {
 	private _menuOK = _display ctrlCreate ["RscButtonMenuOK",9990];
 
 	_menuOK ctrlSetPosition [0.75,1,0.17,0.1];
+	UITOOLTIP(_menuOK,"9990");
 	_menuOK ctrlCommit 0;
 
 	private _menuCancel = _display ctrlCreate ["RscButtonMenuCancel",-1];
@@ -136,7 +186,7 @@ FUNC(Home) = {
 
 	private _introST = "
 	<t align='center'>
-	<t valign='top'>
+	<t valign='middle'>
 	Welcome to BadWolf's Heli Practice Mission <br/>
 	Here you can set up your practices and group. <br/>
 	</t>
@@ -149,18 +199,20 @@ FUNC(Home) = {
 
 	private _playerInfo1 = [
 		["_headerPlayer","RscText",0.08,0.05,"Player:",""]
-		,["_headerPlayer","RscText",0.08,0.05,"Group:",""]
+		,["_headerGroup","RscText",0.08,0.05,"Group:",""]
+		,["_headerSolo","RscText",0.08,0.05,"Solo:",""]
 	];
 
 	private _playerInfo2 = [
 		["_playerNameTitle","RscText",0.2,0.05,profileName,""]
 		,["_playerGroup","RscText",0.2,0.05,"Current Group",""]
+		,["_playerSolo","RscCheckBox",0.05,0.05,"",""]
 	];
 
 	private _playerInfo3 = [
-		["_headerAutorotation","RscText",0.2,0.05,"Autorotation",""]
-		,["_headerTakeOffLanding","RscText",0.2,0.05,"Takeoff Landing",""]
-		,["_headerSlingLoading","RscText",0.2,0.05,"Sling Loading",""]
+		["_headerAutorotation","RscText",0.2,0.05,"Autorotation:",""]
+		,["_headerTakeOffLanding","RscText",0.2,0.05,"Takeoff Landing:",""]
+		,["_headerSlingLoading","RscText",0.2,0.05,"Sling Loading:",""]
 	];
 
 	private _playerInfo4 = [
@@ -202,9 +254,20 @@ FUNC(Home) = {
 	[_menu,_editGroupInfo,0.33,0.4,7] call FUNC(Verticle);
 	[_menu,_controlsButtons,0.76,0.01,8] call FUNC(Verticle);
 
-	/* _lb = _display displayCtrl (1051);
-	_lb ctrlAddEventHandler ["LBSelChanged",{call FUNC(updateVicInformaiton)}]; */
+	[] call EFUNC(core,getPracticeStatusAll);
+	
+	private _display = findDisplay 9999;
 
+	[_display,1061] call FUNC(playerList);
+
+	private _checkBoxAuto = _display displayCtrl (1050);
+	_checkBoxAuto ctrlAddEventHandler ["CheckedChanged",{[0,name player] call EFUNC(core,togglePractice);}];
+	private _checkBoxTOL = _display displayCtrl (1051);
+	_checkBoxTOL ctrlAddEventHandler ["CheckedChanged",{[1,name player] call EFUNC(core,togglePractice);}];
+	private _checkBoxSling = _display displayCtrl (1052);
+	_checkBoxSling ctrlAddEventHandler ["CheckedChanged",{[2,name player] call EFUNC(core,togglePractice);}];
+	private _checkBoxSolo = _display displayCtrl (1032);
+	_checkBoxSolo ctrlAddEventHandler ["CheckedChanged",{[3,name player] call EFUNC(core,togglePractice);}];
 };
 
 FUNC(SpawnAC) = {
@@ -244,29 +307,88 @@ FUNC(SpawnAC) = {
 
 	[1011] call FUNC(getTypeList);
 
-	private _menuOK = ((findDisplay 9999) displayCtrl (9990));
-	_menuOK ctrlSetText "Spawn";
-	_menuOK buttonSetAction "[] call bad_mainmenu_fnc_SpawnVic;";
-	_menuOK ctrlCommit 0;
-
-	_lb = _display displayCtrl (1011);
+	private _lb = _display displayCtrl (1011);
 	_lb ctrlAddEventHandler ["LBSelChanged",{call FUNC(updateVicInformaiton)}];
-
 };
 
 FUNC(Autorotation) = {
 
 	params["_menu"];
 	
-	private _controlsButtons = [
-		["_title","RscButton",0.4,0.07,"Toggle Practice On/Off","[0] call bad_core_fnc_togglePractice"]
-		,["_title","RscButton",0.4,0.07,"Toggle Practice On/Off","[1] call bad_core_fnc_togglePractice"]
-		,["_title","RscButton",0.4,0.07,"Toggle Practice On/Off","[2] call bad_core_fnc_togglePractice"]
-		,["_title","RscButton",0.4,0.07,"Toggle Practice On/Off","[3] call bad_core_fnc_togglePractice"]
+	private _practiceStatus = [
+		["_practiceEnabled","RscText",0.34,0.05,"Autorotation Practice Enabled:",""]
+		,["_playerAutoroation","RscCheckBox",0.05,0.05,"",""]
+		,["_soloEnabled","RscText",0.34,0.05,"Solo Practice Enabled:",""]
+		,["_playerSolo","RscCheckBox",0.05,0.05,"",{[3,name player] call EFUNC(core,togglePractice);}]
 	];
 
+	private _picture =[
+		["_heliPic","RscPictureKeepAspect",0.6,0.6,"",""]
+	];
+	
+	private _engineSlider =[
+		["_engineTitle","RscText",0.2,0.05,"Set Engine Damage:",""]
+		,["_engineSlider","RscSlider",0.2,0.05,"",""]
+		,["_engineEdit","RscEdit",0.075,0.05,"",""]
+	];
+	
+	private _tailSlider =[
+		["_tailTitle","RscText",0.23,0.05,"Set Tail Rotor Damage:",""]
+		,["_tailSlider","RscSlider",0.2,0.05,"",""]
+		,["_tailEdit","RscEdit",0.075,0.05,"",""]
+	];
 
-	[_menu,_controlsButtons,-0.08,0.01,1] call FUNC(Verticle);
+	private _quickMenu = [
+		["_quickRepair","RscButton",0.33,0.09,"Repair Aircraft","[] call bad_core_fnc_repair;"]
+		,["_quickHeal","RscButton",0.33,0.09,"Full Heal","[] call bad_core_fnc_fullHeal;"]
+		,["_quickHeal","RscButton",0.33,0.09,"Apply Damage [Immediate]","[parseNumber ctrlText ((findDisplay 9999) displayCtrl (1032)),parseNumber ctrlText ((findDisplay 9999) displayCtrl (1042))] call bad_autorotation_fnc_execDamageToVic;"]
+	];
+
+//{parseText ctrlText ((findDisplay 9999) displayCtrl (1032));}
+
+	[_menu,_practiceStatus,-0.08,0.01,1] call FUNC(Horizontal);
+	[_menu,_picture,0.035,0.11,2] call FUNC(Verticle);
+	[_menu,_engineSlider,0,0.15,3] call FUNC(Horizontal);
+	[_menu,_tailSlider,0.2,0.6,4] call FUNC(Horizontal);
+	[_menu,_quickMenu,0.76,0.01,5] call FUNC(Verticle);
+
+	private _heliPic = ((findDisplay 9999) displayCtrl (1020));
+	_pathPic =  (getText(configfile >> "CfgVehicles" >> "RHS_MELB_MH6M" >> "picture"));
+	_heliPic ctrlSetText format ["%1",_pathPic];
+
+	_player = name player;
+
+	_practiceCurrentStatus = [0,_player] call EFUNC(core,practiceStatus);
+	_soloCurrentStatus = [3,_player] call EFUNC(core,practiceStatus);
+
+	private _checkBoxAuto = ((findDisplay 9999) displayCtrl (1011));
+
+	if (_practiceCurrentStatus == 0) then {
+			_checkBoxAuto cbSetChecked false;
+		} else {
+			_checkBoxAuto cbSetChecked true;
+	};
+
+	private _checkBoxSolo = ((findDisplay 9999) displayCtrl (1013));
+	
+	if (_soloCurrentStatus == 0) then {
+			_checkBoxSolo cbSetChecked false;
+		} else {
+			_checkBoxSolo cbSetChecked true;
+	};
+
+	private _sliderEngine = ((findDisplay 9999) displayCtrl (1031));
+	_sliderEngine sliderSetRange [0, 1];
+	_sliderEngine sliderSetSpeed [0.1, 0.1];
+	_sliderEngine ctrlAddEventHandler ["SliderPosChanged",{_value = str (_this select 1);ctrlSetText [1032, _value];}];
+
+	private _sliderTRotor = ((findDisplay 9999) displayCtrl (1041));
+	_sliderTRotor sliderSetRange [0, 1];
+	_sliderTRotor sliderSetSpeed [0.1, 0.1];
+	_sliderTRotor ctrlAddEventHandler ["SliderPosChanged",{_value = str (_this select 1);ctrlSetText [1042, _value];}];
+
+	_checkBoxAuto ctrlAddEventHandler ["CheckedChanged",{[0,name player] call EFUNC(core,togglePractice);}];
+	_checkBoxSolo ctrlAddEventHandler ["CheckedChanged",{[3,name player] call EFUNC(core,togglePractice);}];
 };
 
 

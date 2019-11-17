@@ -1,31 +1,12 @@
 #include "script_component.hpp"
 
-["bad_engineDMG", {
-    params ["_veh"];
-		_veh setHitPointDamage ["HitEngine",1];
-}] call CBA_fnc_addEventHandler;
-["bad_tailRotDMG", {
-    params ["_veh"];
-		_veh setHitPointDamage ["HitVRotor",1];
-}] call CBA_fnc_addEventHandler;
-["bad_bothDMG", {
-    params ["_veh"];
-		_veh setHitPointDamage ["HitEngine",1];_veh setHitPointDamage ["HitVRotor",1];
+["bad_applyDamage", {
+    params ["_veh","_damageEng","_damageTRot"];
+		_veh setHitPointDamage ["HitEngine",_damageEng];
+		_veh setHitPointDamage ["HitVRotor",_damageTRot];
 }] call CBA_fnc_addEventHandler;
 
-FUNC(autoRotActive) = {
-	params["_autoRotSwitchL"];
-	if (_autoRotSwitchL) then
-	{
-		player setVariable["autoRotSwitch", false];
-		hint "Autorotaion Menu Disabled";
-		player setVariable["autoRotSolo", false];	
-		player removeEventHandler ["GetInMan",0];
-	} else {
-		player setVariable["autoRotSwitch", true];
-		hint "Autorotaion Menu Enabled";
-	};	
-};
+
 
 FUNC(soloActive) = {
 	params["_autoRotSwitchL","_soloSwitchL"];
@@ -66,4 +47,20 @@ FUNC(soloFunction) = {
 					};
 		};
 	};
+};
+
+FUNC(execDamageToVic) = {
+	params["_damageEng","_damageTRot"];
+
+	private _playerVic = vehicle player;
+
+	if (_playerVic != player) then {
+		
+		private _veh = vehicle player;
+
+		["bad_applyDamage", [_veh,_damageEng,_damageTRot], vehicle player] call CBA_fnc_targetEvent;
+
+	} else {
+		hint "You must be in a vehicle to apply damage.";
+	}
 };

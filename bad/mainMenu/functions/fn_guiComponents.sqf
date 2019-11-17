@@ -24,6 +24,10 @@ FUNC(Verticle) = {
 
 		[_ctrlType,_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(ctrlSwitch);
 
+		_stridc = str _idc;
+
+		UITOOLTIP(_ctrlCreate,_stridc);
+
 		_ctrlCreate ctrlCommit 0;
 
 		_yCoord = _yCoord + _ctrlHeight + 0.01;
@@ -56,6 +60,10 @@ FUNC(Horizontal) = {
 
 		[_ctrlType,_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(ctrlSwitch);
 
+		_stridc = str _idc;
+
+		UITOOLTIP(_ctrlCreate,_stridc);
+
 		_ctrlCreate ctrlCommit 0;
 
 		_xCoord = _xCoord + _ctrlWidth + 0.01;
@@ -69,22 +77,22 @@ FUNC(ctrlSwitch) = {
 
 	switch _ctrlType do {
 		case "RscButton": {
-			[_ctrlCreate,_ctrltext,_ctrlfunction] call FUNC(BadButton);
+			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadButton);
 		};
 		case "RscText": {
-			[_ctrlCreate,_ctrltext,_ctrlfunction] call FUNC(BadText);
+			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadText);
 		};
 		case "RscStructuredText": {
-			[_ctrlCreate,_ctrltext,_ctrlfunction] call FUNC(BadTextStructured);
+			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadTextStructured);
 		};
 		case "RscListBox": {
 			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadListbox);
 		};
 		case "RscPictureKeepAspect": {
-			[_ctrlCreate,_ctrltext,_ctrlfunction] call FUNC(BadPicture);
+			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadPicture);
 		};
 		case "RscCombo": {
-			[_ctrlCreate,_ctrltext,_ctrlfunction] call FUNC(BadCombo);
+			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadCombo);
 		};
 		case "RscEdit": {
 			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadEdit);
@@ -92,45 +100,51 @@ FUNC(ctrlSwitch) = {
 		case "RscCheckBox": {
 			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadCheckBox);
 		};
+		case "RscSlider": {
+			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadCheckBox);
+		};
 	};
 };
 
 
 FUNC(BadButton) = {
-	params["_ctrlCreate","_ctrltext","_ctrlfunction"];
+	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 
 	_ctrlCreate ctrlSetText _ctrltext;
 	_ctrlCreate buttonSetAction _ctrlfunction;
 };
 
 FUNC(BadText) = {
-	params["_ctrlCreate","_ctrltext"];
+	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 
 	_ctrlCreate ctrlSetText _ctrltext;
 };
 
 FUNC(BadTextStructured) = {
-	params["_ctrlCreate","_ctrltext"];
+	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 
 	_ctrlCreate ctrlSetStructuredText parseText _ctrltext;
-	_ctrlCreate ctrlSetBackgroundColor [1, 0, 0, 0.5];
+	_ctrlCreate ctrlSetBackgroundColor [1, 1, 1, 0.25];
 };
 
 FUNC(BadListbox) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
+
 };
 
 FUNC(BadPicture) = {
-	params["_ctrlCreate","_ctrltext","_ctrlfunction"];
+	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
+
 };
 
 FUNC(BadCombo) = {
-	params["_ctrlCreate","_ctrltext","_ctrlfunction"];
+	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 
 	lbCLear _ctrlCreate;
 	{
 		_ctrlCreate lbAdd _x;
 	} forEach _ctrltext;
+	_ctrlCreate lbSetCurSel 0;
 };
 
 FUNC(BadEdit) = {
@@ -138,5 +152,9 @@ FUNC(BadEdit) = {
 };
 
 FUNC(BadCheckBox) = {
+	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
+};
+
+FUNC(BadSlider) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 };

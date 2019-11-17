@@ -32,7 +32,6 @@ class cfgFunctions{
 			class mainMenu{postInit = 1;};
 			class guiComponents{postInit = 1;};
 			class spawnMenu{postInit = 1;};
-			class homeMenu{postInit = 1;};
 		};
 	};
 };
