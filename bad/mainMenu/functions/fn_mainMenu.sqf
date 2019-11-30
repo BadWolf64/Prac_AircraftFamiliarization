@@ -22,7 +22,7 @@ FUNC(activeMenu) = {
 		};
 
 	[] call FUNC(clearMenu);
-	[] call FUNC(contextualOk);
+	[_menu] call FUNC(contextualOk);
 
 	switch _menu do {
 		case 0: {
@@ -91,15 +91,26 @@ FUNC(contextualOk) = {
 		switch _menu do {
 		case 0: {
 			//do nothing for now.
+			// will need to call FUNC(SoloActive)
 		};
 		case 1: {
-			;
+			_menuOK ctrlSetText "Spawn";
+			_menuOK buttonSetAction "[] call bad_mainmenu_fnc_SpawnVic;";
+			_menuOK ctrlCommit 0;
 		};
 		case 2: {
 			//I will get to it. 
+			_menuOK ctrlSetText "Start";
+			//_damageEng = parseNumber ctrlText ((findDisplay 9999) displayCtrl (1032));
+			//_damageTRot = parseNumber ctrlText ((findDisplay 9999) displayCtrl (1042));
+			_menuOK buttonSetAction "bad_autorotation_damagevalues set [0,parseNumber ctrlText ((findDisplay 9999) displayCtrl (1032))];
+			bad_autorotation_damagevalues set [1,parseNumber ctrlText ((findDisplay 9999) displayCtrl (1042))];
+			bad_autorotation_damagevalues set [2,parseNumber ctrlText ((findDisplay 9999) displayCtrl (1081))];
+			bad_autorotation_damagevalues set [3,parseNumber ctrlText ((findDisplay 9999) displayCtrl (1091))];
+			[] call bad_autorotation_fnc_soloActive;";
+			_menuOK ctrlCommit 0;
 		};
 	};
-
 };
 
 FUNC(mainMenuFrame) = {
@@ -309,17 +320,19 @@ FUNC(SpawnAC) = {
 
 	private _lb = _display displayCtrl (1011);
 	_lb ctrlAddEventHandler ["LBSelChanged",{call FUNC(updateVicInformaiton)}];
+	_lb lbSetCurSel 0;
 };
 
 FUNC(Autorotation) = {
 
 	params["_menu"];
+
 	
 	private _practiceStatus = [
 		["_practiceEnabled","RscText",0.34,0.05,"Autorotation Practice Enabled:",""]
 		,["_playerAutoroation","RscCheckBox",0.05,0.05,"",""]
 		,["_soloEnabled","RscText",0.34,0.05,"Solo Practice Enabled:",""]
-		,["_playerSolo","RscCheckBox",0.05,0.05,"",{[3,name player] call EFUNC(core,togglePractice);}]
+		,["_playerSolo","RscCheckBox",0.05,0.05,"",""]
 	];
 
 	private _picture =[
@@ -341,16 +354,45 @@ FUNC(Autorotation) = {
 	private _quickMenu = [
 		["_quickRepair","RscButton",0.33,0.09,"Repair Aircraft","[] call bad_core_fnc_repair;"]
 		,["_quickHeal","RscButton",0.33,0.09,"Full Heal","[] call bad_core_fnc_fullHeal;"]
-		,["_quickHeal","RscButton",0.33,0.09,"Apply Damage [Immediate]","[parseNumber ctrlText ((findDisplay 9999) displayCtrl (1032)),parseNumber ctrlText ((findDisplay 9999) displayCtrl (1042))] call bad_autorotation_fnc_execDamageToVic;"]
+		,["_quickDamage","RscButton",0.33,0.09,"Apply Damage [Immediate]","[parseNumber ctrlText ((findDisplay 9999) displayCtrl (1032)),parseNumber ctrlText ((findDisplay 9999) displayCtrl (1042))] call bad_autorotation_fnc_execDamageToVic;"]
+		,["_quickACE","RscText",0.33,0.09,"Enable ACE Self Interact quick trigger",""]
+		,["_quickACECB","RscCheckBox",0.05,0.05,"",""]
 	];
 
-//{parseText ctrlText ((findDisplay 9999) displayCtrl (1032));}
+	private _soloTitleFrame = [
+		["_soloTitle","RscText",0.15,0.05,"Solo Options:",""]
+		,["_soloFrame","RscFrame",0.55,0.25,"",""]
+	];
+
+	private _soloOptions1 = [
+		["_soloHeaderOption","RscText",0.2,0.05,"Option",""]
+		,["_soloHeaderValue","RscText",0.15,0.05,"Value",""]
+		,["_soloHeaderCB","RscText",0.15,0.05,"Randomized",""]
+	];
+
+	private _soloOptions2 = [
+		["_soloHeightTriggerText","RscText",0.2,0.05,"Trigger Height:",""]
+		,["_soloHeightTriggerValue","RscEdit",0.06,0.05,"",""]
+		,["_soloHeightTriggerUnit","RscText",0.1,0.05,"m",""]
+	];
+
+	private _soloOptions3 = [
+		["_soloTimeTriggerText","RscText",0.2,0.05,"Trigger Time:",""]
+		,["_soloTimeTriggerValue","RscEdit",0.06,0.05,"",""]
+		,["_soloTimeTriggerUnit","RscText",0.1,0.05,"secs",""]
+		,["_soloTimeTriggerCB","RscCheckBox",0.05,0.05,"",""]
+
+	];
 
 	[_menu,_practiceStatus,-0.08,0.01,1] call FUNC(Horizontal);
 	[_menu,_picture,0.035,0.11,2] call FUNC(Verticle);
 	[_menu,_engineSlider,0,0.15,3] call FUNC(Horizontal);
 	[_menu,_tailSlider,0.2,0.6,4] call FUNC(Horizontal);
 	[_menu,_quickMenu,0.76,0.01,5] call FUNC(Verticle);
+	[_menu,_soloTitleFrame,-0.08,0.75,6] call FUNC(Horizontal);
+	[_menu,_soloOptions1,0.1,0.75,7] call FUNC(Horizontal);
+	[_menu,_soloOptions2,0.1,0.825,8] call FUNC(Horizontal);
+	[_menu,_soloOptions3,0.1,0.9,9] call FUNC(Horizontal);
 
 	private _heliPic = ((findDisplay 9999) displayCtrl (1020));
 	_pathPic =  (getText(configfile >> "CfgVehicles" >> "RHS_MELB_MH6M" >> "picture"));
@@ -377,6 +419,29 @@ FUNC(Autorotation) = {
 			_checkBoxSolo cbSetChecked true;
 	};
 
+	private _damageEng = EGVAR(autorotation,damageValues) select 0;
+	private _damageTRot = EGVAR(autorotation,damageValues) select 1;
+	private _soloHeightTriggerValue = EGVAR(autorotation,damageValues) select 2;
+	private _soloTimeTriggerValue = EGVAR(autorotation,damageValues) select 3;
+	private _soloTimeTriggerCB = EGVAR(autorotation,damageValues) select 4;
+
+	private _soloTimeTriggerCtrl = ((findDisplay 9999) displayCtrl (1093));
+	
+	if (_soloTimeTriggerCB == 0) then {
+			_soloTimeTriggerCtrl cbSetChecked false;
+		} else {
+			_soloTimeTriggerCtrl cbSetChecked true;
+	};
+
+	private _engineEdit = ((findDisplay 9999) displayCtrl (1032));
+	_engineEdit ctrlSetText str _damageEng;
+	private _tailEdit = ((findDisplay 9999) displayCtrl (1042));
+	_tailEdit ctrlSetText str _damageTRot;
+	private _triggerHeightEdit = ((findDisplay 9999) displayCtrl (1081));
+	_triggerHeightEdit ctrlSetText str _soloHeightTriggerValue;
+	private _triggerTimeEdit = ((findDisplay 9999) displayCtrl (1091));
+	_triggerTimeEdit ctrlSetText str _soloTimeTriggerValue;
+
 	private _sliderEngine = ((findDisplay 9999) displayCtrl (1031));
 	_sliderEngine sliderSetRange [0, 1];
 	_sliderEngine sliderSetSpeed [0.1, 0.1];
@@ -389,6 +454,16 @@ FUNC(Autorotation) = {
 
 	_checkBoxAuto ctrlAddEventHandler ["CheckedChanged",{[0,name player] call EFUNC(core,togglePractice);}];
 	_checkBoxSolo ctrlAddEventHandler ["CheckedChanged",{[3,name player] call EFUNC(core,togglePractice);}];
+	_soloTimeTriggerCtrl ctrlAddEventHandler ["CheckedChanged",{
+		private _soloTimeTriggerCB = EGVAR(autorotation,damageValues) select 4;
+		if (_soloTimeTriggerCB == 0) then {
+			EGVAR(autorotation,damageValues) set [4,1];
+		} else {
+			EGVAR(autorotation,damageValues) set [4,0];
+		};
+	}];
+
+
 };
 
 

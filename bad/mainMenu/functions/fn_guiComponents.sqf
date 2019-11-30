@@ -23,8 +23,10 @@ FUNC(Verticle) = {
 		_ctrlCreate ctrlSetPosition [_xCoord,_yCoord,_ctrlWidth,_ctrlHeight];
 
 		[_ctrlType,_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(ctrlSwitch);
+		
+		_ctrlPosition = ctrlPosition _ctrlCreate;
 
-		_stridc = str _idc;
+		_stridc = str _idc + " at Position " + str _ctrlPosition;
 
 		UITOOLTIP(_ctrlCreate,_stridc);
 
@@ -58,9 +60,11 @@ FUNC(Horizontal) = {
 
 		_ctrlCreate ctrlSetPosition [_xCoord,_yCoord,_ctrlWidth,_ctrlHeight];
 
+		_ctrlPosition = ctrlPosition _ctrlCreate;
+
 		[_ctrlType,_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(ctrlSwitch);
 
-		_stridc = str _idc;
+		_stridc = str _idc + " at Position " + str _ctrlPosition;
 
 		UITOOLTIP(_ctrlCreate,_stridc);
 
@@ -103,6 +107,9 @@ FUNC(ctrlSwitch) = {
 		case "RscSlider": {
 			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadCheckBox);
 		};
+		case "RscFrame": {
+			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadFrame);
+		};
 	};
 };
 
@@ -129,7 +136,6 @@ FUNC(BadTextStructured) = {
 
 FUNC(BadListbox) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
-
 };
 
 FUNC(BadPicture) = {
@@ -149,6 +155,7 @@ FUNC(BadCombo) = {
 
 FUNC(BadEdit) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
+	_ctrlCreate ctrlSetText _ctrltext;
 };
 
 FUNC(BadCheckBox) = {
@@ -156,5 +163,9 @@ FUNC(BadCheckBox) = {
 };
 
 FUNC(BadSlider) = {
+	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
+};
+
+FUNC(BadFrame) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 };

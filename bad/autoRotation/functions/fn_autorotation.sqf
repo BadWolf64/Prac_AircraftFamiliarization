@@ -6,61 +6,73 @@
 		_veh setHitPointDamage ["HitVRotor",_damageTRot];
 }] call CBA_fnc_addEventHandler;
 
-
+// [_damageEng(DOUBLE),_damageTRot(DOUBLE),_trigHeight(DOUBLE),_trigTime(DOUBLE),_trigTimeRand(BOOL)._ACEquick(BOOL)]
+GVAR(damageValues) = [0,0,50,30,0,0];
 
 FUNC(soloActive) = {
-	params["_autoRotSwitchL","_soloSwitchL"];
-	if (_autoRotSwitchL) then {
-		if (_soloSwitchL) then
-		{
-			player setVariable["autoRotSolo", false];
-			hint "Solo Practice Disabled";
-			player removeEventHandler ["GetInMan",0];
-		} else {
-			player setVariable["autoRotSolo", true];
-			hint "Solo Practice Enabled";
-			player addEventHandler ["GetInMan",{if ((_this select 1) == ("driver")) then {[player getVariable "autoRotSolo"] call soloFunction;};}];
-		};	
-	};
+
+	//params[];
+	
+	TRACE_1("Solo activated for",player);
+
+
+	private _damageEng = GVAR(damageValues) select 0;
+	private _damageTRot = GVAR(damageValues) select 1;
+	private _practiceEnabled =[3,name player] call EFUNC(core,practiceStatus);
+	if (_practiceEnabled == 0) then
+	{
+		player removeEventHandler ["GetInMan",0];
+	} else {
+	hint "Get in a Heli to start";
+		player addEventHandler ["GetInMan",{if ((_this select 1) == ("driver")) then {[] call FUNC(solo);};}];
+	};	
 };
 
-FUNC(soloFunction) = {
-	params ["_soloSwitchL"];
-	private _timeToWait = random [15, 30 ,90];
-	private _selectDMG = selectRandom [1,2];
-	["bad_repair", [vehicle player], vehicle player] call CBA_fnc_targetEvent;
-	hint "Get above 75m";
-	[_soloSwitchL,_selectDMG,_timeToWait] spawn {
-		params ["_soloSwitchL","_selectDMG","_timeToWait"];
-		if (_this select 0) then 
-		{
-				waitUntil{
-				private _alt = getPosATL vehicle player select 2;
-				(_alt > 75)
-				};
-					hint "AUTOROTATE ARMED";
-					sleep _timeToWait;
-					if(_selectDMG == 1) then {
-					["bad_engineDMG", [vehicle player], vehicle player] call CBA_fnc_targetEvent;
-					} else {
-					["bad_bothDMG", [vehicle player], vehicle player] call CBA_fnc_targetEvent;
-					};
+FUNC(solo) = {
+
+	TRACE_1("Solo autorotation started for",player);
+	private _damageEng = GVAR(damageValues) select 0;
+	private _damageTRot = GVAR(damageValues) select 1;
+	private _soloHeightTriggerValue = GVAR(damageValues) select 2;
+	private _soloTimeTriggerValue = GVAR(damageValues) select 3;
+
+	[] call EFUNC(core,repair);
+	[] call EFUNC(core,fullHeal);
+	hint format ["Get above %1m",_soloHeightTriggerValue];
+	TRACE_1("Height required is ",_soloHeightTriggerValue);
+	[_damageEng,_damageTRot,_soloTimeTriggerValue] spawn {
+		params ["_damageEng","_damageTRot","_soloTimeTriggerValue"];
+		private _soloHeightTriggerValue = GVAR(damageValues) select 2;
+		private _soloTimeTriggerCB = GVAR(damageValues) select 4;
+
+		if (_soloTimeTriggerCB == 1) then {
+			_soloTimeTriggerValue = random [_soloTimeTriggerValue-_soloTimeTriggerValue,_soloTimeTriggerValue,_soloTimeTriggerValue+30];
 		};
+		TRACE_1("Time until Trigger is ",_soloTimeTriggerValue);
+		waitUntil{
+		private _alt = getPosATL vehicle player select 2;
+		(_alt > _soloHeightTriggerValue)
+		};
+		hint "AUTOROTATE ARMED";
+		sleep _soloTimeTriggerValue;
+		[_damageEng,_damageTRot] call FUNC(execDamageToVic);
 	};
 };
 
 FUNC(execDamageToVic) = {
 	params["_damageEng","_damageTRot"];
 
+	private _practiceEnabled =[0,name player] call EFUNC(core,practiceStatus);
+
 	private _playerVic = vehicle player;
 
-	if (_playerVic != player) then {
+	if (_playerVic != player && _practiceEnabled == 1) then {
 		
 		private _veh = vehicle player;
 
 		["bad_applyDamage", [_veh,_damageEng,_damageTRot], vehicle player] call CBA_fnc_targetEvent;
 
 	} else {
-		hint "You must be in a vehicle to apply damage.";
+		hint "You must be in a Helicopter with autrotation ENABLED to apply damage.";
 	}
 };
