@@ -6,6 +6,7 @@ GVAR(menus) = [
 	,"Autorotation"
 	,"TakeOffLanding"
 	,"SlingLoading"
+	,"CAS"
 	,"InstMenu"
 ];
 
@@ -33,6 +34,9 @@ FUNC(activeMenu) = {
 		};
 		case 2: {
 			[2] call FUNC(Autorotation);
+		};
+		case 3: {
+			[3] call FUNC(TakeOffLanding);
 		};
 	};
 };
@@ -99,15 +103,19 @@ FUNC(contextualOk) = {
 			_menuOK ctrlCommit 0;
 		};
 		case 2: {
-			//I will get to it. 
 			_menuOK ctrlSetText "Start";
-			//_damageEng = parseNumber ctrlText ((findDisplay 9999) displayCtrl (1032));
-			//_damageTRot = parseNumber ctrlText ((findDisplay 9999) displayCtrl (1042));
 			_menuOK buttonSetAction "bad_autorotation_damagevalues set [0,parseNumber ctrlText ((findDisplay 9999) displayCtrl (1032))];
 			bad_autorotation_damagevalues set [1,parseNumber ctrlText ((findDisplay 9999) displayCtrl (1042))];
 			bad_autorotation_damagevalues set [2,parseNumber ctrlText ((findDisplay 9999) displayCtrl (1081))];
 			bad_autorotation_damagevalues set [3,parseNumber ctrlText ((findDisplay 9999) displayCtrl (1091))];
 			[] call bad_autorotation_fnc_soloActive;";
+			_menuOK ctrlCommit 0;
+		};
+		case 3: {
+			//do nothing for now.
+			// will need to call FUNC(SoloActive)
+			_menuOK ctrlSetText "Test";
+			_menuOK buttonSetAction "";
 			_menuOK ctrlCommit 0;
 		};
 	};
@@ -172,12 +180,19 @@ FUNC(mainMenuFrame) = {
 
 	_menuTOL ctrlSetPosition [0.35,-0.1,0.145,0.1];
 	_menuTOL ctrlSetText "Take Off Landing";
+	_menuTOL ctrlAddEventHandler ["SetFocus",{[3] call FUNC(activeMenu)}];
 	_menuTOL ctrlCommit 0;
 
 	private _menuSlingLoading = _display ctrlCreate ["RscButtonMenu",-1];
 
 	_menuSlingLoading ctrlSetPosition [0.5,-0.1,0.145,0.1];
 	_menuSlingLoading ctrlSetText "Sling Loading";
+	_menuSlingLoading ctrlCommit 0;
+
+	private _menuSlingLoading = _display ctrlCreate ["RscButtonMenu",-1];
+
+	_menuSlingLoading ctrlSetPosition [0.65,-0.1,0.145,0.1];
+	_menuSlingLoading ctrlSetText "CAS";
 	_menuSlingLoading ctrlCommit 0;
 
 	private _menuSlingInstructor = _display ctrlCreate ["RscButtonMenu",-1];
@@ -253,6 +268,8 @@ FUNC(Home) = {
 		,["_homeSsOff","RscButton",0.33,0.12,"Turn Off SafeStart","[false] call bad_core_fnc_toggleSS;"]
 		,["_homeSsOn","RscButton",0.33,0.05,"Turn On SafeStart","[true] call bad_core_fnc_toggleSS;"]
 		,["_cleanUpWrecks","RscButton",0.33,0.09,"Clean up Wrecks and Empty Vics","[] call bad_core_fnc_cleanUpWrecks;"]
+		,["_allowDamage","RscText",0.33,0.05,"God Mode",""]
+		,["_allowDamage","RscCombo",0.33,0.05,["DISABLED","ENABLED"],""]
 		,["_endMission","RscButton",0.33,0.09,"End Mission","[west] call POTATO_adminMenu_fnc_endMission;"]
 	];
 
@@ -306,10 +323,10 @@ FUNC(SpawnAC) = {
 	];
 
 	private _controlsButtons = [
-		["_spawnArea","RscText",0.33,0.04,"Select Spawn Area",""]
-		,["_vicListBox","RscCombo",0.33,0.04,["Airfield","Player Location"],""]
-		,["_engineON","RscText",0.33,0.04,"Spawn with Engine Running?",""]
-		,["_engineOnSelect","RscCombo",0.33,0.04,["Yes","No"],""]
+		["_spawnArea","RscText",0.33,0.05,"Select Spawn Area",""]
+		,["_vicListBox","RscCombo",0.33,0.05,["Airfield","Player Location"],""]
+		,["_engineON","RscText",0.33,0.05,"Spawn with Engine Running?",""]
+		,["_engineOnSelect","RscCombo",0.33,0.05,["Yes","No"],""]
 	];
 
 	[_menu,_controlsListBox,-0.08,0.01,1] call FUNC(Verticle);
@@ -462,17 +479,98 @@ FUNC(Autorotation) = {
 			EGVAR(autorotation,damageValues) set [4,0];
 		};
 	}];
+};
 
+FUNC(TakeOffLanding) = {
+
+	params["_menu"];
+
+	private _takeoffLaningIntroST = "
+	<t align='center'>
+	<t valign='middle'>
+	All LZ's will be marked with smoke.	All other options are as per settings. <br/>
+	Some funcitons are not yet complete. Continious training is functional. 
+	</t>
+	</t>
+	";
+
+	private _practiceStatus = [
+		["_practiceEnabled","RscText",0.34,0.05,"Takeoff Landing Practice Enabled:",""]
+		,["_playerAutoroation","RscCheckBox",0.05,0.05,"",""]
+		,["_soloEnabled","RscText",0.34,0.05,"Solo Practice Enabled:",""]
+		,["_playerSolo","RscCheckBox",0.05,0.05,"",""]
+	];
+
+	private _AOSetupTitleFrame = [
+		["_AOSetupTitle","RscText",0.15,0.05,"AO Options:",""]
+		,["_AOSetupFrame","RscFrame",0.37,0.25,"",""]
+		,["_AOSetupInfo","RscStructuredText",0.27,0.25,_takeoffLaningIntroST,""]
+	];
+
+	private _AOSetup = [
+		["_difficultyTitle","RscText",0.35,0.05,"Select AO Type:",""]
+		,["_difficulty","RscCombo",0.35,0.05,["Open","Tight","Random"],""]
+		,["_LZMarkersTitle","RscText",0.35,0.05,"LZ marked on map with:",""]
+		,["_LZMarkers","RscCombo",0.35,0.05,["LZ Exact","AO Only"],""]
+	];
+
+	private _EISetupTitleFrame = [
+		["_EISetupTitle","RscText",0.15,0.05,"EI Options:",""]
+		,["_EISetupFrame","RscFrame",0.65,0.25,"",""]
+	];
+
+	private _EISetup = [
+		["_EIPresenceTitle","RscText",0.35,0.05,"Placeholder",""]
+		,["_placeholder","RscText",0.35,0.05,"Placeholder",""]
+		,["_placeholder","RscText",0.35,0.05,"Placeholder",""]
+		,["_placeholder","RscText",0.35,0.05,"Placeholder",""]
+	];
+
+	
+	private _MissionSetupTitleFrame = [
+		["_EISetupTitle","RscText",0.81,0.05,"Mission Setup [Options here will only apply if you have selected 'Mission' in Practice Type]",""]
+		,["_EISetupFrame","RscFrame",0.81,0.4,"",""]
+	];
+
+	private _missionSetup1 = [
+		["_placeholder","RscText",0.35,0.05,"Placeholder",""]
+		,["_placeholder","RscText",0.35,0.05,"Placeholder",""]
+	];
+
+	private _missionSetup2 = [
+		["_placeholder","RscText",0.35,0.05,"Placeholder",""]
+		,["_placeholder","RscText",0.35,0.05,"Placeholder",""]
+	];
+	
+	private _rightFrame = [
+		["_practiceType","RscText",0.33,0.05,"Practice Type",""]
+		,["_practiceTypeLB","RscCombo",0.33,0.05,["Continious","Mission","Qualification"],""]
+		,["_teleportToAO","RscText",0.33,0.05,"Teleport to AO [Disabled for Mission]",""]
+		,["_teleportToAOLB","RscCombo",0.33,0.05,["DISABLED","ENABLED"],""]
+		,["_autoRepair","RscText",0.33,0.05,"Auto-repair exiting AO",""]
+		,["_autoRepairLB","RscCombo",0.33,0.05,["ENABLED","DISABLED"],""]
+	];
+
+	[_menu,_practiceStatus,-0.08,0.01,1] call FUNC(Horizontal);
+	[_menu,_AOSetupTitleFrame,-0.08,0.1,2] call FUNC(Horizontal);
+	[_menu,_AOSetup,0.09,0.1,3] call FUNC(Verticle);
+	[_menu,_EISetupTitleFrame,-0.08,0.38,4] call FUNC(Horizontal);
+	[_menu,_EISetup,0.09,0.38,5] call FUNC(Verticle);
+	[_menu,_MissionSetupTitleFrame,-0.08,0.63,6] call FUNC(Verticle);
+	[_menu,_missionSetup1,-0.07,0.69,7] call FUNC(Verticle);
+	[_menu,_missionSetup2,0.30,0.69,8] call FUNC(Verticle);
+	[_menu,_rightFrame,0.76,0.01,9] call FUNC(Verticle);
 
 };
+
 
 
 /*
-FUNC(TakeOffLanding) = {
+FUNC(SlingLoading) = {
 
 };
 
-FUNC(SlingLoading) = {
+FUNC(CAS) = {
 
 };
 

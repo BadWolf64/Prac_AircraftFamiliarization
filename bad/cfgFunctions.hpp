@@ -23,10 +23,10 @@ class cfgFunctions{
 //			file = "bad\slingLoading\functions";
 //			class template{postInit = 1;};
 //		};
-//		class takeOffAndLanding{
-//			file = "bad\takeOffAndLanding\functions";
-//			class template{postInit = 1;};
-//		};
+		class takeOffAndLanding{
+			file = "bad\takeOffAndLanding\functions";
+			class takeoffLanding{postInit = 1;};
+		};
 		class mainMenu{
 			file = "bad\mainMenu\functions";
 			class mainMenu{postInit = 1;};
