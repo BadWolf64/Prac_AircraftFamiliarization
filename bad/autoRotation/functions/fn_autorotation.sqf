@@ -24,6 +24,7 @@ FUNC(soloActive) = {
 		player removeEventHandler ["GetInMan",0];
 	} else {
 	hint "Get in a Heli to start";
+		player removeEventHandler ["GetInMan",0];
 		player addEventHandler ["GetInMan",{if ((_this select 1) == ("driver")) then {[] call FUNC(solo);};}];
 	};	
 };

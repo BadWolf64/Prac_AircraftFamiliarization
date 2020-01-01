@@ -1,13 +1,11 @@
 #include "script_component.hpp"
 
-GVAR(AvailableVicTypes) = [
-	"Helicopter"
-];
-
 FUNC(getTypeList) = {
 
 	waitUntil { !isNull findDisplay 9999};
-	_kind = "Helicopter";
+	_kindCtrl = ((findDisplay 9999) displayCtrl (1010));
+	_cbIndex = lbCurSel _kindCtrl;
+	_kind = _kindCtrl lbText _cbIndex;
 	_idc = ((findDisplay 9999) displayCtrl (1011));
 	lbCLear _idc;
 
@@ -50,7 +48,7 @@ FUNC(updateVicInformaiton) = {
 	
 	private _idc_modPack = ((findDisplay 9999) displayCtrl (1023));
 	private _modPack = (getText(configFile >> "cfgVehicles" >> _classVeh>> "author"));
-	_idc_modPack ctrlSetText format ["Madpack:   %1",_modPack];
+	_idc_modPack ctrlSetText format ["Modpack:   %1",_modPack];
 
 	private _idc_crewCap = ((findDisplay 9999) displayCtrl (1024));
 	private _crewCap = [_classVeh, true]call BIS_fnc_crewCount;
@@ -83,6 +81,7 @@ FUNC(SpawnVic) = {
 	private _spawnPads = allMapMarkers select {_x find "pad" isEqualTo 0};
 	private _aircraftDir = (getDir Player) - 180;
 	private	_emptyPos = (getPos player) findEmptyPosition [10,50,_classVeh];
+	private _runwayEnd = allMapMarkers select {_x find "runway" isEqualTo 0};
 
 	TRACE_1("Spawn vehicle",_classVeh);
 	TRACE_1("Spawn in",_location);
@@ -98,7 +97,12 @@ FUNC(SpawnVic) = {
 			};
 		} forEach _spawnPads;
 	} else {
-		[_classVeh,_emptyPos,_aircraftDir,_engineState] call FUNC(placeVic);
+		if (_location == "Runway End") then {
+			_emptyPos = getMarkerPos "runwayEnd";
+			[_classVeh,_emptyPos,_aircraftDir,_engineState] call FUNC(placeVic);
+		} else {
+			[_classVeh,_emptyPos,_aircraftDir,_engineState] call FUNC(placeVic);
+		};
 	};
 };
 

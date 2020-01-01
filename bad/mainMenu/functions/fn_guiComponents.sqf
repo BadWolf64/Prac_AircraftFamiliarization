@@ -3,11 +3,11 @@
 FUNC(Verticle) = {
 	
 	params["_menu","_array","_xStartPos","_yStartPos","_index"];
-	 
+	
 	private _display = findDisplay 9999;
 	private _yCoord = _yStartPos;
 
-	 	{
+	{
 		_yCoord;
 		_ctrlName = _x select 0;
 		_ctrlType = _x select 1;
@@ -110,6 +110,9 @@ FUNC(ctrlSwitch) = {
 		case "RscFrame": {
 			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadFrame);
 		};
+		case "RscXListBox": {
+			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadXListBox);
+		};
 	};
 };
 
@@ -168,4 +171,14 @@ FUNC(BadSlider) = {
 
 FUNC(BadFrame) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
+};
+
+FUNC(BadXListBox) = {
+	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
+
+	lbCLear _ctrlCreate;
+	{
+		_ctrlCreate lbAdd _x;
+	} forEach _ctrltext;
+	_ctrlCreate lbSetCurSel 0;
 };

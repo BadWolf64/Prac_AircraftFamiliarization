@@ -306,8 +306,8 @@ FUNC(SpawnAC) = {
 
 		// [name,type,width,height,text,function]
 	private _controlsListBox = [
-		["_vicListTitle","RscText",0.4,0.09,"Available Aircraft",""]
-		,["_vicListBox","RscListBox",0.4,0.97,"",""]
+		["_vicListTitle","RscXListBox",0.4,0.05,["Helicopter","Plane"],""]
+		,["_vicListBox","RscListBox",0.4,1.01,"",""]
 	];
 
 	private _controlsVicInfo = [
@@ -324,9 +324,9 @@ FUNC(SpawnAC) = {
 
 	private _controlsButtons = [
 		["_spawnArea","RscText",0.33,0.05,"Select Spawn Area",""]
-		,["_vicListBox","RscCombo",0.33,0.05,["Airfield","Player Location"],""]
+		,["_vicListBox","RscCombo",0.33,0.05,["AIRFIELD","RUNWAY END","PLAYER LOCATION"],""]
 		,["_engineON","RscText",0.33,0.05,"Spawn with Engine Running?",""]
-		,["_engineOnSelect","RscCombo",0.33,0.05,["Yes","No"],""]
+		,["_engineOnSelect","RscCombo",0.33,0.05,["YES","NO"],""]
 	];
 
 	[_menu,_controlsListBox,-0.08,0.01,1] call FUNC(Verticle);
@@ -338,6 +338,10 @@ FUNC(SpawnAC) = {
 	private _lb = _display displayCtrl (1011);
 	_lb ctrlAddEventHandler ["LBSelChanged",{call FUNC(updateVicInformaiton)}];
 	_lb lbSetCurSel 0;
+
+	private _cb = _display displayCtrl (1010);
+	_cb ctrlAddEventhandler ["LBSelChanged",{call FUNC(getTypeList)}];
+	_cb lbSetCurSel 0;
 };
 
 FUNC(Autorotation) = {
@@ -509,9 +513,9 @@ FUNC(TakeOffLanding) = {
 
 	private _AOSetup = [
 		["_difficultyTitle","RscText",0.35,0.05,"Select AO Type:",""]
-		,["_difficulty","RscCombo",0.35,0.05,["Open","Tight","Random"],""]
+		,["_difficulty","RscCombo",0.35,0.05,["OPEN","TIGHT","RANDOM"],""]
 		,["_LZMarkersTitle","RscText",0.35,0.05,"LZ marked on map with:",""]
-		,["_LZMarkers","RscCombo",0.35,0.05,["LZ Exact","AO Only"],""]
+		,["_LZMarkers","RscCombo",0.35,0.05,["LZ EXACT","AO ONLY"],""]
 	];
 
 	private _EISetupTitleFrame = [
@@ -519,11 +523,18 @@ FUNC(TakeOffLanding) = {
 		,["_EISetupFrame","RscFrame",0.65,0.25,"",""]
 	];
 
-	private _EISetup = [
-		["_EIPresenceTitle","RscText",0.35,0.05,"Placeholder",""]
-		,["_placeholder","RscText",0.35,0.05,"Placeholder",""]
-		,["_placeholder","RscText",0.35,0.05,"Placeholder",""]
-		,["_placeholder","RscText",0.35,0.05,"Placeholder",""]
+	private _EISetup1 = [
+		["_EIPresenceTitle","RscText",0.3,0.05,"EI Presence in AO",""]
+		,["_EIPresence","RscCombo",0.3,0.05,["DISABLED","ENABLED"],""]
+		,["_EINumbersTitle","RscText",0.3,0.05,"Amount of EI in AO",""]
+		,["_EINumbers","RscCombo",0.3,0.05,["LIGHT","MEDIUM","HEAVY"],""]
+	];
+
+	private _EISetup2 = [
+		["_EIVicPresenceTitle","RscText",0.3,0.05,"Vehicle EI in AO",""]
+		,["_EIVicPresence","RscCombo",0.3,0.05,["DISABLED","ENABLED"],""]
+		,["_EISpawnRadiusTitle","RscText",0.3,0.05,"EI Spawn Radius",""]
+		,["_EISpawnRadius","RscCombo",0.3,0.05,["FAR","MEDIUM","CLOSE"],""]
 	];
 
 	
@@ -544,7 +555,7 @@ FUNC(TakeOffLanding) = {
 	
 	private _rightFrame = [
 		["_practiceType","RscText",0.33,0.05,"Practice Type",""]
-		,["_practiceTypeLB","RscCombo",0.33,0.05,["Continious","Mission","Qualification"],""]
+		,["_practiceTypeLB","RscCombo",0.33,0.05,["CONTINIOUS","MISSION","QUALIFICATION"],""]
 		,["_teleportToAO","RscText",0.33,0.05,"Teleport to AO [Disabled for Mission]",""]
 		,["_teleportToAOLB","RscCombo",0.33,0.05,["DISABLED","ENABLED"],""]
 		,["_autoRepair","RscText",0.33,0.05,"Auto-repair exiting AO",""]
@@ -555,11 +566,12 @@ FUNC(TakeOffLanding) = {
 	[_menu,_AOSetupTitleFrame,-0.08,0.1,2] call FUNC(Horizontal);
 	[_menu,_AOSetup,0.09,0.1,3] call FUNC(Verticle);
 	[_menu,_EISetupTitleFrame,-0.08,0.38,4] call FUNC(Horizontal);
-	[_menu,_EISetup,0.09,0.38,5] call FUNC(Verticle);
-	[_menu,_MissionSetupTitleFrame,-0.08,0.63,6] call FUNC(Verticle);
-	[_menu,_missionSetup1,-0.07,0.69,7] call FUNC(Verticle);
-	[_menu,_missionSetup2,0.30,0.69,8] call FUNC(Verticle);
-	[_menu,_rightFrame,0.76,0.01,9] call FUNC(Verticle);
+	[_menu,_EISetup1,0.09,0.38,5] call FUNC(Verticle);
+	[_menu,_EISetup2,0.41,0.38,6] call FUNC(Verticle);
+	[_menu,_MissionSetupTitleFrame,-0.08,0.63,7] call FUNC(Verticle);
+	[_menu,_missionSetup1,-0.07,0.69,8] call FUNC(Verticle);
+	[_menu,_missionSetup2,0.30,0.69,9] call FUNC(Verticle);
+	[_menu,_rightFrame,0.76,0.01,10] call FUNC(Verticle);
 
 };
 
