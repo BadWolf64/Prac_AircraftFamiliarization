@@ -9,6 +9,18 @@
 // [_damageEng(DOUBLE),_damageTRot(DOUBLE),_trigHeight(DOUBLE),_trigTime(DOUBLE),_trigTimeRand(BOOL)._ACEquick(BOOL)]
 GVAR(damageValues) = [0,0,50,30,0,0];
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(soloActive) = {
 
 	//params[];
@@ -28,6 +40,18 @@ FUNC(soloActive) = {
 		player addEventHandler ["GetInMan",{if ((_this select 1) == ("driver")) then {[] call FUNC(solo);};}];
 	};	
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(solo) = {
 
@@ -59,6 +83,18 @@ FUNC(solo) = {
 		[_damageEng,_damageTRot] call FUNC(execDamageToVic);
 	};
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(execDamageToVic) = {
 	params["_damageEng","_damageTRot"];

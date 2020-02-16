@@ -1,5 +1,17 @@
  #include "script_component.hpp"
 
+ /* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(Verticle) = {
 	
 	params["_menu","_array","_xStartPos","_yStartPos","_index"];
@@ -38,6 +50,18 @@ FUNC(Verticle) = {
 
 };
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(Horizontal) = {
 
 	params["_menu","_array","_xStartPos","_yStartPos","_index"];
@@ -75,6 +99,18 @@ FUNC(Horizontal) = {
 	} forEach _array;
 
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(ctrlSwitch) = {
 	params["_ctrlType","_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
@@ -116,6 +152,17 @@ FUNC(ctrlSwitch) = {
 	};
 };
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(BadButton) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
@@ -124,11 +171,35 @@ FUNC(BadButton) = {
 	_ctrlCreate buttonSetAction _ctrlfunction;
 };
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(BadText) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 
 	_ctrlCreate ctrlSetText _ctrltext;
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(BadTextStructured) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
@@ -137,14 +208,50 @@ FUNC(BadTextStructured) = {
 	_ctrlCreate ctrlSetBackgroundColor [1, 1, 1, 0.25];
 };
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(BadListbox) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(BadPicture) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(BadCombo) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
@@ -156,22 +263,82 @@ FUNC(BadCombo) = {
 	_ctrlCreate lbSetCurSel 0;
 };
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(BadEdit) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 	_ctrlCreate ctrlSetText _ctrltext;
 };
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(BadCheckBox) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(BadSlider) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 };
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(BadFrame) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(BadXListBox) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];

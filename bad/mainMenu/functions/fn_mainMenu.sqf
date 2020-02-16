@@ -10,6 +10,18 @@ GVAR(menus) = [
 	,"InstMenu"
 ];
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(activeMenu) = {
 	params["_menu"];
 	
@@ -41,6 +53,18 @@ FUNC(activeMenu) = {
 	};
 };
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(clearMenu) = {
 	private _ctrls = []; 
 	for "_i" from 1000 to 2000 do {  
@@ -59,6 +83,18 @@ FUNC(clearMenu) = {
 		ctrlDelete _ctrl;
 	} forEach _ctrls;
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(playerList) = {
 
@@ -81,6 +117,18 @@ FUNC(playerList) = {
 	} forEach _playerList;
 
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(contextualOk) = {
 	params["_menu"];
@@ -120,6 +168,18 @@ FUNC(contextualOk) = {
 		};
 	};
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(mainMenuFrame) = {
 	disableSerialization;
@@ -201,6 +261,18 @@ FUNC(mainMenuFrame) = {
 	_menuSlingInstructor ctrlSetText "Instructor Menu";
 	_menuSlingInstructor ctrlCommit 0;
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(Home) = {
 	
@@ -298,6 +370,18 @@ FUNC(Home) = {
 	_checkBoxSolo ctrlAddEventHandler ["CheckedChanged",{[3,name player] call EFUNC(core,togglePractice);}];
 };
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(SpawnAC) = {
 
 	params["_menu"];
@@ -343,6 +427,18 @@ FUNC(SpawnAC) = {
 	_cb ctrlAddEventhandler ["LBSelChanged",{call FUNC(getTypeList)}];
 	_cb lbSetCurSel 0;
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(Autorotation) = {
 
@@ -485,6 +581,18 @@ FUNC(Autorotation) = {
 	}];
 };
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(TakeOffLanding) = {
 
 	params["_menu"];
@@ -515,7 +623,7 @@ FUNC(TakeOffLanding) = {
 		["_difficultyTitle","RscText",0.35,0.05,"Select AO Type:",""]
 		,["_difficulty","RscCombo",0.35,0.05,["OPEN","TIGHT","RANDOM"],""]
 		,["_LZMarkersTitle","RscText",0.35,0.05,"LZ marked on map with:",""]
-		,["_LZMarkers","RscCombo",0.35,0.05,["LZ EXACT","AO ONLY"],""]
+		,["_LZMarkers","RscCombo",0.35,0.05,["LZ EXACT + AO","LZ EXACT ONLY","AO ONLY"],""]
 	];
 
 	private _EISetupTitleFrame = [
@@ -533,11 +641,10 @@ FUNC(TakeOffLanding) = {
 	private _EISetup2 = [
 		["_EIVicPresenceTitle","RscText",0.3,0.05,"Vehicle EI in AO",""]
 		,["_EIVicPresence","RscCombo",0.3,0.05,["DISABLED","ENABLED"],""]
-		,["_EISpawnRadiusTitle","RscText",0.3,0.05,"EI Spawn Radius",""]
-		,["_EISpawnRadius","RscCombo",0.3,0.05,["FAR","MEDIUM","CLOSE"],""]
+		,["_EISpawnRadiusTitle","RscText",0.3,0.05,"EI Difficulty",""]
+		,["_EISpawnRadius","RscCombo",0.3,0.05,["EASY","MEDIUM","HARD"],""]
 	];
 
-	
 	private _MissionSetupTitleFrame = [
 		["_EISetupTitle","RscText",0.81,0.05,"Mission Setup [Options here will only apply if you have selected 'Mission' in Practice Type]",""]
 		,["_EISetupFrame","RscFrame",0.81,0.4,"",""]

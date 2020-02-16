@@ -1,5 +1,17 @@
 #include "script_component.hpp"
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(getTypeList) = {
 
 	waitUntil { !isNull findDisplay 9999};
@@ -32,6 +44,18 @@ FUNC(getTypeList) = {
 		};
 	};
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(updateVicInformaiton) = {
 
@@ -68,7 +92,17 @@ FUNC(updateVicInformaiton) = {
 	_idcfast_fastRopeEnabled ctrlSetText format ["Fastrope Enabled: %1",_fastRopeEnabled];
 };
 
-// This requires ebing reworked once I have the ComboBoxes figured out. 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(SpawnVic) = {
 	private _index = lbCurSel 1011;
@@ -106,6 +140,18 @@ FUNC(SpawnVic) = {
 	};
 };
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(placeVic) = {
 	params["_classVeh","_emptyPos","_aircraftDir","_engineState"];
 	private _aircraft = createVehicle [_classVeh, _emptyPos, [], 0, "NONE"];
@@ -114,3 +160,4 @@ FUNC(placeVic) = {
 		_aircraft engineOn true;
 	};
 };
+

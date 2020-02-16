@@ -1,11 +1,35 @@
 #include "script_component.hpp"
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(targetRepair) = {
 	params["_target"];
 	private _playerVic = vehicle _target;
 	_playerVic setDamage 0;
 	_playerVic setFuel 1;
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(repair) = {
 

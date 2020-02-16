@@ -1,9 +1,33 @@
 #include "script_component.hpp"
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(targetHeal) = {
 	params ["_target"];
 	[QACEGVAR(medical_treatment,fullHealLocal), [_target, _target], _target] call CBA_fnc_targetEvent;
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(fullHeal) = {
 	private _playerVic = vehicle player;

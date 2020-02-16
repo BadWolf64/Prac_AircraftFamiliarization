@@ -10,6 +10,7 @@ class cfgFunctions{
 			class rearm{postInit = 1;};
 			class ssOff{postInit = 1;};
 			class playerPracticeStatus{postInit = 1;};
+			class playerSettings{postInit = 1;};
 		};
 		class autoRotation{
 			file = "bad\autoRotation\functions";

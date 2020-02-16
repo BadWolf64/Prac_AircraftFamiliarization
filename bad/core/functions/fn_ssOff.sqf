@@ -1,5 +1,17 @@
 #include "script_component.hpp"
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(toggleSS) = {
 
 	params ["_value"];

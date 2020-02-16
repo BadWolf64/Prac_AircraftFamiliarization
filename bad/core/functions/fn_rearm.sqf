@@ -1,9 +1,33 @@
 #include "script_component.hpp"
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(targetRearm) = {
 	params ["_target"];
 	[_target setVehicleAmmoDef 1, [_target], _target] call CBA_fnc_targetEvent;
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(rearm) = {
 

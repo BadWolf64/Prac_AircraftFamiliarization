@@ -1,5 +1,17 @@
 #include "script_component.hpp"
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(togglePractice) = {
 
 	params["_practice","_player"];
@@ -26,6 +38,18 @@ FUNC(togglePractice) = {
     publicVariable "PV_playerPracticeStatus";
 };
 
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
+
 FUNC(getPracticeStatusAll) = {
 
 	private _availablePractices = [
@@ -51,6 +75,18 @@ FUNC(getPracticeStatusAll) = {
 		};
 	} forEach _availablePractices;
 };
+
+/* 
+
+FUNCTION : 
+
+DESCRIPTION : 
+
+INPUTS :
+
+OUTPUTS : 
+
+ */
 
 FUNC(practiceStatus) = {
 
