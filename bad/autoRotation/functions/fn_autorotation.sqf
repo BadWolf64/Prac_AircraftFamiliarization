@@ -14,12 +14,12 @@ GVAR(damageValues) = [0,0,50,30,0,0];
 FUNCTION : soloActive - [] call bad_autorotation_fnc_soloActive;
 
 DESCRIPTION : Activates solo training for autorotation practice. 
-	Called by bad_mainmenu_fnc_contextualOk when on the Autorotation menu. 
+			Called by bad_mainmenu_fnc_contextualOk when on the Autorotation menu. 
 
 INPUTS : NA
 
-OUTPUTS : Calls eventhandler that is activated by the player getting into the pilot seat of a helicopter.
-	The eventhandler calls bad_mainmenu_fnc_solo when it is triggered. 
+OUTPUTS :	Calls eventhandler that is activated by the player getting into the pilot seat of a helicopter.
+			The eventhandler calls bad_mainmenu_fnc_solo when it is triggered. 
 
  */
 
@@ -29,8 +29,6 @@ FUNC(soloActive) = {
 	
 	TRACE_1("Solo activated for",player);
 
-	private _damageEng = GVAR(damageValues) select 0;
-	private _damageTRot = GVAR(damageValues) select 1;
 	private _practiceEnabled =[3,name player] call EFUNC(core,practiceStatus);
 	if (_practiceEnabled == 0) then
 	{
@@ -46,11 +44,17 @@ FUNC(soloActive) = {
 
 FUNCTION : solo - [] call bad_mainmenu_fnc_solo;
 
-DESCRIPTION : 
+DESCRIPTION : Starts by making sure that the vic entered is fully repaired and that the player is healed. 
+			Instructs the player to get above the desired hight and wait the time required to execute the damage to the vic. 
+			Once damage has been applied the function has finished and will only the work again after the players has got out of the 
+			vic at which point the event handler will take over. 
 
-INPUTS :
 
-OUTPUTS : 
+INPUTS : GVAR(damageValues)
+
+OUTPUTS : 	Damage to vic using : FUNC(execDamageToVic)
+			Repair AC with EFUNC(core,repair)
+			Heal PLayer using EFUNC(fullHeal)
 
  */
 
@@ -87,7 +91,7 @@ FUNC(solo) = {
 
 /* 
 
-FUNCTION : 
+FUNCTION : execDamageToVic : ['damage to Engine','damage to tail rotor'] call bad_autorotation_fnc_execDamageToVic
 
 DESCRIPTION : 
 
