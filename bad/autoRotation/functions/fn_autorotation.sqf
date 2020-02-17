@@ -11,13 +11,15 @@ GVAR(damageValues) = [0,0,50,30,0,0];
 
 /* 
 
-FUNCTION : 
+FUNCTION : soloActive - [] call bad_autorotation_fnc_soloActive;
 
-DESCRIPTION : 
+DESCRIPTION : Activates solo training for autorotation practice. 
+	Called by bad_mainmenu_fnc_contextualOk when on the Autorotation menu. 
 
-INPUTS :
+INPUTS : NA
 
-OUTPUTS : 
+OUTPUTS : Calls eventhandler that is activated by the player getting into the pilot seat of a helicopter.
+	The eventhandler calls bad_mainmenu_fnc_solo when it is triggered. 
 
  */
 
@@ -26,7 +28,6 @@ FUNC(soloActive) = {
 	//params[];
 	
 	TRACE_1("Solo activated for",player);
-
 
 	private _damageEng = GVAR(damageValues) select 0;
 	private _damageTRot = GVAR(damageValues) select 1;
@@ -43,7 +44,7 @@ FUNC(soloActive) = {
 
 /* 
 
-FUNCTION : 
+FUNCTION : solo - [] call bad_mainmenu_fnc_solo;
 
 DESCRIPTION : 
 
