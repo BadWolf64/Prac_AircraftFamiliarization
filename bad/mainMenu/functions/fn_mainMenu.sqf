@@ -163,7 +163,7 @@ FUNC(contextualOk) = {
 			//do nothing for now.
 			// will need to call FUNC(SoloActive)
 			_menuOK ctrlSetText "Test";
-			_menuOK buttonSetAction "";
+			_menuOK buttonSetAction "[] call bad_core_fnc_writeToPSTOL";
 			_menuOK ctrlCommit 0;
 		};
 	};
@@ -512,7 +512,7 @@ FUNC(Autorotation) = {
 	[_menu,_soloOptions3,0.1,0.9,9] call FUNC(Horizontal);
 
 	private _heliPic = ((findDisplay 9999) displayCtrl (1020));
-	_pathPic =  (getText(configfile >> "CfgVehicles" >> "RHS_MELB_MH6M" >> "picture"));
+	_pathPic =  (getText(configfile >> "CfgVehicles" >> "B_Heli_Light_01_F" >> "picture"));
 	_heliPic ctrlSetText format ["%1",_pathPic];
 
 	_player = name player;
@@ -609,8 +609,6 @@ FUNC(TakeOffLanding) = {
 	private _practiceStatus = [
 		["_practiceEnabled","RscText",0.34,0.05,"Takeoff Landing Practice Enabled:",""]
 		,["_playerAutoroation","RscCheckBox",0.05,0.05,"",""]
-		,["_soloEnabled","RscText",0.34,0.05,"Solo Practice Enabled:",""]
-		,["_playerSolo","RscCheckBox",0.05,0.05,"",""]
 	];
 
 	private _AOSetupTitleFrame = [
@@ -680,9 +678,16 @@ FUNC(TakeOffLanding) = {
 	[_menu,_missionSetup2,0.30,0.69,9] call FUNC(Verticle);
 	[_menu,_rightFrame,0.76,0.01,10] call FUNC(Verticle);
 
-};
+	private _status = [1,name player] call EFUNC(core,practiceStatus);
+	private _checkBox = ((findDisplay 9999) displayCtrl (1011));
+	if (_status == 1) then {
+		_checkBox cbSetChecked true;
+	} else {
+		_checkBox cbSetChecked false;
+	};
 
-
+	private _checkBoxTOL = _display displayCtrl (1011);
+	_checkBoxTOL ctrlAddEventHandler ["CheckedChanged",{[1,name player] call EFUNC(core,togglePractice);}];};
 
 /*
 FUNC(SlingLoading) = {

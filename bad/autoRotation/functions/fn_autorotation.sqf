@@ -93,11 +93,12 @@ FUNC(solo) = {
 
 FUNCTION : execDamageToVic : ['damage to Engine','damage to tail rotor'] call bad_autorotation_fnc_execDamageToVic
 
-DESCRIPTION : 
+DESCRIPTION : This executes that damage pass through to the function on the engine and the tail rotor of the helicopter in question. 
 
-INPUTS :
+INPUTS : _damageEng - damage value to be set on Engine [DOUBLE 0-1]
+	_damageTRot - damage value to be set on Tail Rotor [DOUBLE 0-1]
 
-OUTPUTS : 
+OUTPUTS : Damage to the Helicopter object. 
 
  */
 
