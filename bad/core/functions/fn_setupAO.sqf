@@ -1,5 +1,5 @@
 #include "script_component.hpp"
-#include "eiForces.hpp"
+#include "settingsTOL.hpp"
 
 GVAR(ActiveAOs) = [
 
@@ -71,8 +71,8 @@ FUNC(selectAO) = {
 			};
 		} forEach _LZs;
 		private _LZ = selectRandom _LZs;
+		[_LZ,_pracType] call FUNC(setupAO);
 	};
-
 };
 
 
@@ -93,7 +93,7 @@ OUTPUTS :
 
 FUNC(setupAO) ={
 
-	params["_type"];
+	params["_posAO","_type"];
 	
 
 	private _strLZ = format ["|%3_%1|%2|mil_pickup|ICON|[1,1]|0|Solid|ColorBlue|1|%3_%1",name player,_positionAO,_type];
