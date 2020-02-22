@@ -31,9 +31,28 @@ INPUTS :
 
 OUTPUTS : 
 
- */
+*/
 
 FUNC(landing) = {
+
+	landed = [{ 
+		params ["_veh"];
+		private _velVeh = velocity _veh;
+		private _marker = format ["LandingZone_%1",name Player];
+		private _posMarker = getMarkerPos _marker;
+		private _dist = [_veh,_posMarker] call CBA_fnc_getDistance;
+		private _reqDist = 50;
+		if(_type == "TLZ") then 
+		{
+			_reqDist = 20;
+		} else {
+		_reqDist = 100;
+		};
+		if (_dist < _reqDist && isTouchingGround (vehicle player)  && ( _velVeh select 0 < 0.01) && (_velVeh select 1 < 0.01) && (_velVeh select 2 < 0.01)) exitWith 
+		{
+			[_veh] call FUNC(takeoff);
+		};	
+	}, 0, _veh] call CBA_fnc_addPerFrameHandler;
 
 };
 
@@ -50,6 +69,19 @@ OUTPUTS :
  */
 
 FUNC(takeoff) = {
+	params["_veh"];
+	hint "Now Take off and get out of the AO";
+	[landed] call CBA_fnc_removePerFrameHandler;
+	exitAO = [{
+			params ["_veh"];
+			private _marker = format ["LandingZone_%1",name Player];
+			private _posMarker = getMarkerPos _marker;
+			private _dist = [_veh,_posMarker] call CBA_fnc_getDistance;
+			if (_dist > 500) exitWith 
+			{
+				[_posMarker,_marker] call EFUNC(core,CleanUpAO);
+			};
+	}, 0, _veh] call CBA_fnc_addPerFrameHandler;
 
 };
 

@@ -15,6 +15,10 @@
 #define SLING_LIGHT "Chemlight_green"
 #define CAS_LIGHT "Chemlight_red"
 
+#define TELEPORT_DIST 2000
+#define LZ_TIGHT_REQ_DIST 20
+#define LZ_OPEN_REQ_DIST 100
+
 // EI Groups Setup
 #define BASE_EI (configfile >> "CfgGroups" >> "East" >> "CUP_O_RU" >> "Infantry" >> "CUP_O_RU_InfSquad_VDV_M_EMR")
 #define MG_EI (configfile >> "CfgGroups" >> "East" >> "CUP_O_RU" >> "Infantry" >> "CUP_O_RU_InfSection_MG_VDV_M_EMR")
