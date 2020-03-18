@@ -3,7 +3,7 @@ enableDebugConsole = 2;
 EnableTargetDebug = 1;
 allowFunctionsRecompile = 1;
 
-onLoadName = "Helicopter Familiarization";
+onLoadName = "Aircraft Familiarization";
 #include "CfgLoadouts.hpp"
 #include "cfg\CfgEventHandlers.hpp"
 #include "cfg\Params.hpp"

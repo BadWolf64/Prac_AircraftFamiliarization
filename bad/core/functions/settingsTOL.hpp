@@ -1,7 +1,7 @@
 // AO Settings
 
 #define AO_ELIPSE "|AO_%1|%2|empty|ELLIPSE|[500,500]|0|border|ColorRed|1|"
-#define MARKER_LZ "|%3_%1|%2|mil_pickup|ICON|[1,1]|0|Solid|ColorBlue|1|%3_%1"
+#define MARKER_LZ "|Target_%1|%2|mil_pickup|ICON|[1,1]|0|Solid|ColorBlue|1|%3_%1"
 
 #define TOL_EASY 
 #define TOL_MEDIUM 
@@ -16,8 +16,6 @@
 #define CAS_LIGHT "Chemlight_red"
 
 #define TELEPORT_DIST 2000
-#define LZ_TIGHT_REQ_DIST 20
-#define LZ_OPEN_REQ_DIST 100
 
 // EI Groups Setup
 #define BASE_EI (configfile >> "CfgGroups" >> "East" >> "CUP_O_RU" >> "Infantry" >> "CUP_O_RU_InfSquad_VDV_M_EMR")

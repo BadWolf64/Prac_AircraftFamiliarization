@@ -663,7 +663,7 @@ FUNC(TakeOffLanding) = {
 		,["_practiceTypeLB","RscCombo",0.33,0.05,["CONTINIOUS","MISSION","QUALIFICATION"],""]
 		,["_teleportToAO","RscText",0.33,0.05,"Teleport to AO [Disabled for Mission]",""]
 		,["_teleportToAOLB","RscCombo",0.33,0.05,["DISABLED","ENABLED"],""]
-		,["_autoRepair","RscText",0.33,0.05,"Auto-repair exiting AO",""]
+		,["_autoRepair","RscText",0.33,0.05,"Auto-repair/rearm exiting AO",""]
 		,["_autoRepairLB","RscCombo",0.33,0.05,["ENABLED","DISABLED"],""]
 	];
 
@@ -685,6 +685,18 @@ FUNC(TakeOffLanding) = {
 	} else {
 		_checkBox cbSetChecked false;
 	};
+
+	private _settingICD = [1101,1103,1105,1031,1033,1051,1061,1053,1063];
+	{
+		
+		private _ctrl = ((findDisplay 9999) displayCtrl (_x));
+		private _lbsize = lbSize _ctrl;
+		private _index = -1;
+		private _text = EGVAR(core,PlayerSettingsTOL) select _forEachIndex;
+		for "_index" from 0 to (_lbsize -1) do {
+		if (_ctrl lbText _index isEqualTo (_text)) exitWith {_ctrl lbSetCurSel _index;};
+		};
+	} forEach _settingICD;
 
 	private _checkBoxTOL = _display displayCtrl (1011);
 	_checkBoxTOL ctrlAddEventHandler ["CheckedChanged",{[1,name player] call EFUNC(core,togglePractice);}];};
