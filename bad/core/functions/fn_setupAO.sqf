@@ -1,5 +1,5 @@
 #include "script_component.hpp"
-#include "settingsTOL.hpp"
+#include "settingsAO.hpp"
 
 GVAR(ActiveAOs) = [];
 
@@ -202,9 +202,11 @@ FUNC(oppositionEI) = {
 
 	switch (_pracType) do {
 		case "TOL": {
-
+			
 		};
-		default { };
+		case "CAS": {
+			
+		};
 	};
 
 };

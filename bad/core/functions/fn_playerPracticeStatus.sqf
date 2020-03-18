@@ -30,6 +30,10 @@ FUNC(togglePractice) = {
 	} else {
 		_playerCurrentStatus set [_practice,0];
 		hint "DISABLED";
+		private _AO = EGVAR(core,ActiveAOs) select 0;
+		private _positionAO = getMarkerPOS _AO;
+		[_positionAO] call FUNC(CleanUpAO);
+		GVAR(ActiveAOs) = [];
 	};
 	_playerArray set [2,_playerCurrentStatus];
 	_practiceStatus set [_index,_playerArray];

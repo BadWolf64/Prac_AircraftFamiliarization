@@ -1,5 +1,12 @@
 #include "script_component.hpp"
 
+_waveOff = ["Wave Off", "<t color='#E70000'>Wave Off LZ</t>", "", {
+			private _AO = EGVAR(core,ActiveAOs) select 0;
+			private _positionAO = getMarkerPOS _AO;
+			[_positionAO] call bad_takeOffAndLanding_fnc_takeoff;
+		}, {if ([player] call CBA_fnc_vehicleRole == "driver" && [1,name player] call bad_core_fnc_practiceStatus == 1)then{true}else{false};}, {}, [], [], 0] call ace_interact_menu_fnc_createAction;
+	["CAManBase", 1, ["ACE_SelfActions"], _waveOff, true] call ace_interact_menu_fnc_addActionToClass;
+
 /* 
 
 FUNCTION : InitializeTOL - CBA Eventhandler
@@ -66,7 +73,7 @@ _getOutHeliCheck = ["vehicle", {
 
 /* 
 
-FUNCTION : landing : [_positionAO] call bad_core_fnc_landing
+FUNCTION : landing : [_positionAO] call bad_takeOffAndLanding_fnc_landing
 
 DESCRIPTION : 
 
@@ -98,7 +105,7 @@ FUNC(landing) = {
 
 /* 
 
-FUNCTION :  landing : [_positionAO] call bad_core_fnc_landing
+FUNCTION :  landing : [_positionAO] call bad_takeOffAndLanding_fnc_takeoff
 
 DESCRIPTION : This the function that handles the distance from the LZ that the vic is to end the exercise. This will also decide how to proceed from here. If continious then it will go back to the selectAO to start the process again. 
 
@@ -113,7 +120,7 @@ FUNC(takeoff) = {
 	TRACE_1("Starting Takeoff function at position ",_positionAO);
 	private _veh = vehicle player;
 	private _methodPrac = EGVAR(core,PlayerSettingsTOL) select 0;
-	hint "Now Take off and get out of the AO";
+	hint "Get out of the AO";
 	[landed] call CBA_fnc_removePerFrameHandler;
 	exitAO = [{
 			_args = _this select 0;

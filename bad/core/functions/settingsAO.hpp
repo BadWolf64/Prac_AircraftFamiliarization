@@ -1,6 +1,6 @@
 // AO Settings
 
-#define AO_ELIPSE "|AO_%1|%2|empty|ELLIPSE|[500,500]|0|border|ColorRed|1|"
+#define AO_ELIPSE "|AO_%1|%2|empty|ELLIPSE|[500,500]|0|DiagGrid|ColorRed|0.5|AO_%1"
 #define MARKER_LZ "|Target_%1|%2|mil_pickup|ICON|[1,1]|0|Solid|ColorBlue|1|%3_%1"
 
 #define TOL_EASY 

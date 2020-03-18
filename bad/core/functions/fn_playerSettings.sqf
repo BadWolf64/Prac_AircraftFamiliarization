@@ -1,5 +1,7 @@
 #include "script_component.hpp"
 
+GVAR(eiForces) = [];
+
 GVAR(PlayerSettingsTOL) = [
 	"CONTINIOUS" 	// TOL Practice Type
 	,"DISABLED" 				// TOL TP Setting 
