@@ -8,7 +8,6 @@ class cfgFunctions{
 			class setupAO{postInit = 1;};
 //			class teleport{postInit = 1;};
 			class rearm{postInit = 1;};
-			class ssOff{postInit = 1;};
 			class playerPracticeStatus{postInit = 1;};
 			class playerSettings{postInit = 1;};
 		};

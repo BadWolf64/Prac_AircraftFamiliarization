@@ -169,8 +169,10 @@ FUNC(setupAO) ={
 				_markerAO = [_str] call BIS_fnc_stringToMarker;
 				
 			} forEach _text;
-
+			TRACE_1("Practice ei ",_ei);
 			if (_ei == "ENABLED") then {
+				TRACE_1("Outside of EiSpawner ",_positionAO);
+				TRACE_1("Outside of EiSpawner ",_pracType);
 				[_positionAO,_pracType] call FUNC(oppositionEI);
 			};
 			TRACE_1("Calling Landing function at position ",_positionAO);
@@ -196,19 +198,98 @@ OUTPUTS :
 FUNC(oppositionEI) = {
 
 	params["_positionAO","_pracType"];
+
+	TRACE_1("Inside of EiSpawner ",_positionAO);
+	TRACE_1("Inside of EiSpawner ",_pracType);
 	
-	private _eiAmount = GVAR(PlayerSettings) select 7;
-	private _eiDifficulty = GVAR(PlayerSettings) select 8;
+	Private _eiVics = GVAR(PlayerSettingsTOL) select 6;
+	TRACE_1("Outside Switch ",_eiVics);
+	Private _eiAmount = GVAR(PlayerSettingsTOL) select 7;
+	TRACE_1("Outside Switch ",_eiAmount);
+	Private _eiDifficulty = GVAR(PlayerSettingsTOL) select 8;
+	TRACE_1("Outside Switch ",_eiDifficulty);
+	Private _infCount = 0;
+	Private _vicCount = 0;
+	Private _infArray = [];
+	Private _vicArray = [];
+	Private _infArrayAll = [];
+	Private _vicArrayAll = [];
+	Private _spawnRad = 1000;
 
 	switch (_pracType) do {
 		case "TOL": {
-			
+			TRACE_1("Inside Switch ",_eiVics);
+			if(_eiVics == "ENABLED") then {
+				_vicCount = 1;
+			};
+			TRACE_1("Inside Switch ",_eiAmount);
+			switch (_eiAmount) do {
+				case "LIGHT": { 
+					_infCount = 1;
+					TRACE_1("Inside Switch ",_infCount);
+				};
+				case "MEDIUM": { 
+					_infCount = 2;
+				};
+				case "HEAVY": {
+					_infCount = 3;
+				};
+			};
+			TRACE_1(" ",_infCount);
+			TRACE_1(" ",_vicCount);
+			TRACE_1("Inside Switch ",_eiDifficulty);
+			switch (_eiDifficulty) do {
+				case "EASY": {
+					_infArray = [BASE_EI,BASE_EI];
+					_vicArray = [LIGHT_VIC];
+				};
+				case "MEDIUM": {
+					_infArray = [BASE_EI,MG_EI];
+					_vicArray = [LIGHT_VIC];
+				};
+				case "HARD": {
+					_infArray = [BASE_EI,MG_EI,AA_EI];
+					_vicArray = [MEDIUM_VIC];
+				};
+			};
+			TRACE_1(" ",_infArray);
+			TRACE_1(" ",_vicArray);
 		};
 		case "CAS": {
-			
+			// Not yet implemented. Will be similar to the above. 
 		};
 	};
+	for "_i" from 1 to _infCount do {
+		_infArrayAll append _infArray;
+	};
+	for "_i" from 1 to _vicCount do {
+		_vicArrayAll append _vicArray;
+	};
 
+	{
+		Private _posEI = [(_positionAO select 0) - (random [400,750,_spawnRad]) * sin (random 359),(_positionAO select 1) - (random [200,400,_spawnRad]) * cos (random 359),0];
+		Private _groupAI = [ _posEI, EAST, _x] call BIS_fnc_spawnGroup;
+		Private _groupStr = format ["%1_%2",name player,_forEachIndex];
+		[_groupAI, true] remoteExec ["deleteGroupWhenEmpty", groupOwner _groupAI];
+		_groupAI setGroupidGlobal [_groupStr];
+		{_x setSkill 0.1;} foreach units _groupAI;
+		_wp =_groupAI addWaypoint [_positionAO,200];
+		_wp setWaypointType "MOVE";
+		_groupAI setCombatMode "RED";
+	} forEach _infArrayAll;
+
+	{
+		Private _posEI = [(_positionAO select 0) - (random [SPAWN_RAD_MIN,SPAWN_RAD_MEAN,SPAWN_RAD_MAX]) * sin (random 359),(_positionAO select 1) - (random [SPAWN_RAD_MIN,SPAWN_RAD_MEAN,SPAWN_RAD_MAX]) * cos (random 359),0];
+		Private _vicAI = [_posEI, 0, _x , EAST] call BIS_fnc_spawnVehicle;
+		Private _groupStr = format ["%1_Vic_%2",name player,_forEachIndex];
+		_groupAI = _vicAI select 2;
+		[_groupAI, true] remoteExec ["deleteGroupWhenEmpty", groupOwner _groupAI];
+		_groupAI setGroupidGlobal [_groupStr];
+		{_x setSkill 0.1;} foreach units _groupAI;
+		_wp =_groupAI addWaypoint [_positionAO,200];
+		_wp setWaypointType "MOVE";
+		_groupAI setCombatMode "RED";
+	} forEach _vicArrayAll;
 };
 
 /* 
@@ -266,6 +347,12 @@ FUNC(CleanUpAO) ={
 	{deleteVehicle _x} forEach _listObjectsLZ;
 	deleteMarker _markerTarget;
 	deleteMarker _markerAO;
+	Private _groupStr = format["O %1", name player];
+	Private _pGroups = allGroups select {str _x find _groupStr isEqualTo 0};
+	{
+		{deleteVehicle _x} forEach units _x;
+		deleteGroup _x;
+	} forEach _pGroups;
 	[exitAO] call CBA_fnc_removePerFrameHandler;
 	[landed] call CBA_fnc_removePerFrameHandler;
 };

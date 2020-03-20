@@ -44,6 +44,34 @@ _inHeliCheckTOL = ["vehicle", {
 	};
 }] call CBA_fnc_addPlayerEventHandler;
 
+_playerDeath = ["unit", {
+	if (!Alive player) then {
+		private _practiceStatus = [1,name player] call EFUNC(core,practiceStatus);
+		private _practiceMethod = EGVAR(core,PlayerSettingsTOL) select 0;
+		if (_practiceStatus == 1) then {
+			switch (_practiceMethod) do {
+				case "CONTINIOUS": { 
+					private _countAOs = count EGVAR(core,ActiveAOs);
+					private _AO = EGVAR(core,ActiveAOs) select 0;
+					private _positionAO = getMarkerPOS _AO;
+					if (_countAOs == 0) then { 
+						["TOL"] call EFUNC(core,selectAO);
+					} else {
+						["_positionAO"] call EFUNC(core,CleanUpAO);
+						["TOL"] call EFUNC(core,selectAO);
+					};
+				};
+				case "MISSION" : {
+
+				};
+				case "QUALIFICATION" : {
+
+				};
+			};
+		};
+	};
+}] call CBA_fnc_addPlayerEventHandler;
+
 _getOutHeliCheck = ["vehicle", {
 	if (isNull objectParent player) then {
 		private _practiceStatus = [1,name player] call EFUNC(core,practiceStatus);
@@ -120,7 +148,7 @@ FUNC(takeoff) = {
 	TRACE_1("Starting Takeoff function at position ",_positionAO);
 	private _veh = vehicle player;
 	private _methodPrac = EGVAR(core,PlayerSettingsTOL) select 0;
-	hint "Get out of the AO";
+	hint "Get clear of the AO";
 	[landed] call CBA_fnc_removePerFrameHandler;
 	exitAO = [{
 			_args = _this select 0;
@@ -128,7 +156,7 @@ FUNC(takeoff) = {
 			Private _positionAO = _args select 1;
 			Private _methodPrac = _args select 2;
 			private _dist = [_veh,_positionAO] call CBA_fnc_getDistance;
-			if (_dist > 500) exitWith 
+			if (_dist > 750) exitWith 
 			{
 				[_positionAO] call EFUNC(core,CleanUpAO);
 				switch (_methodPrac) do {

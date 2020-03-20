@@ -325,9 +325,9 @@ FUNC(Home) = {
 	];
 
 	private _editGroupInfo = [
-		["_editGroupTitle","RscText",0.4,0.05,"Edit Current Group",""]
+		["_editGroupTitle","RscText",0.4,0.05,"Edit Current Group(WIP)",""]
 		,["_editGroupList","RscCombo",0.4,0.05,_allGroupsWithPlayers,""]
-		,["_editGroupTitle","RscText",0.4,0.05,"Edit Current Group Name",""]
+		,["_editGroupTitle","RscText",0.4,0.05,"Edit Current Group Name(WIP)",""]
 		,["_editGroupName","RscEdit",0.4,0.05,"",""]
 		,["_editGroupConfirm","RscButton",0.4,0.05,"Confirm",""]
 	];
@@ -337,12 +337,11 @@ FUNC(Home) = {
 		["_homeRepair","RscButton",0.33,0.09,"Repair Aircraft","[] call bad_core_fnc_repair;"]
 		,["_homeRearm","RscButton",0.33,0.09,"Rearm Aircraft","[] call bad_core_fnc_rearm;"]
 		,["_homeHeal","RscButton",0.33,0.09,"Full Heal","[] call bad_core_fnc_fullHeal;"]
-		,["_homeSsOff","RscButton",0.33,0.12,"Turn Off SafeStart","[false] call bad_core_fnc_toggleSS;"]
-		,["_homeSsOn","RscButton",0.33,0.05,"Turn On SafeStart","[true] call bad_core_fnc_toggleSS;"]
+		,["_homeSsOff","RscButton",0.33,0.12,"Turn Off SafeStart","[false] remoteExecCall ['potato_safeStart_fnc_toggleSafeStart', 2];"]
 		,["_cleanUpWrecks","RscButton",0.33,0.09,"Clean up Wrecks and Empty Vics","[] call bad_core_fnc_cleanUpWrecks;"]
-		,["_allowDamage","RscText",0.33,0.05,"God Mode",""]
+		,["_allowDamage","RscText",0.33,0.05,"God Mode (WIP)",""]
 		,["_allowDamage","RscCombo",0.33,0.05,["DISABLED","ENABLED"],""]
-		,["_endMission","RscButton",0.33,0.09,"End Mission","[west] call POTATO_adminMenu_fnc_endMission;"]
+		,["_endMission","RscButton",0.33,0.09,"End Mission","[west] remoteExecCall ['POTATO_adminMenu_fnc_endMission', 2];"]
 	];
 
 	[_menu,_controlsTitle,-0.08,0.01,1] call FUNC(Verticle);
