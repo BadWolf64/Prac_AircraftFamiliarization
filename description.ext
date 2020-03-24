@@ -1,10 +1,7 @@
 //enableDebugConsole = 2;
 //EnableTargetDebug = 1;
 //allowFunctionsRecompile = 1;
-<<<<<<< HEAD
-=======
 
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 onLoadName = "Aircraft Familiarization";
 #include "CfgLoadouts.hpp"
 #include "cfg\CfgEventHandlers.hpp"

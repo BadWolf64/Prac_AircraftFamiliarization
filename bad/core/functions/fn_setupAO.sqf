@@ -1,12 +1,8 @@
 #include "script_component.hpp"
 #include "settingsAO.hpp"
-<<<<<<< HEAD
-GVAR(ActiveAOs) = [];
-=======
 
 GVAR(ActiveAOs) = [];
 
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 /* 
 FUNCTION : cleanUpWrecks : [] call bad_core_fnc_cleanUpWrecks
 DESCRIPTION : Cleans up the wrecks and empty helicopters and plans on the server. 

@@ -1,36 +1,21 @@
 #include "script_component.hpp"
-<<<<<<< HEAD
-=======
-
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 _waveOff = ["Wave Off", "<t color='#E70000'>Wave Off LZ</t>", "", {
 			private _AO = EGVAR(core,ActiveAOs) select 0;
 			private _positionAO = getMarkerPOS _AO;
 			[_positionAO] call bad_takeOffAndLanding_fnc_takeoff;
 		}, {if ([player] call CBA_fnc_vehicleRole == "driver" && [1,name player] call bad_core_fnc_practiceStatus == 1)then{true}else{false};}, {}, [], [], 0] call ace_interact_menu_fnc_createAction;
 	["CAManBase", 1, ["ACE_SelfActions"], _waveOff, true] call ace_interact_menu_fnc_addActionToClass;
-<<<<<<< HEAD
-=======
-
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 /* 
 FUNCTION : InitializeTOL - CBA Eventhandler
 DESCRIPTION : Single function that calls the other functions when TOL practice is enabled when a player gets in a helicopter. 
 INPUTS :
 OUTPUTS : 
-<<<<<<< HEAD
 NOTE : This should be a switch and it can then be used to command any of the practices to work depending on what is selected. 
-=======
-
-NOTE : This should be a switch and it can then be used to command any of the practices to work depending on what is selected. 
-
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 */
 _inHeliCheckTOL = ["vehicle", {
 	if ((driver (vehicle player)) isEqualTo player && (vehicle player) isKindOf "Helicopter") then {
 		private _practiceStatus = [1,name player] call EFUNC(core,practiceStatus);
 		private _practiceMethod = EGVAR(core,PlayerSettingsTOL) select 0;
-<<<<<<< HEAD
 		if (_practiceStatus == 1) then {
 			switch (_practiceMethod) do {
 				case "CONTINIOUS": { 
@@ -78,61 +63,6 @@ _getOutHeliCheck = ["vehicle", {
 		private _practiceMethod = EGVAR(core,PlayerSettingsTOL) select 0;
 		if (_practiceStatus == 1) then {
 			switch (_practiceMethod) do {
-=======
-		if (_practiceStatus == 1) then {
-			switch (_practiceMethod) do {
-				case "CONTINIOUS": { 
-					private _countAOs = count EGVAR(core,ActiveAOs);
-					if (_countAOs == 0) then { 
-						["TOL"] call EFUNC(core,selectAO);
-					};
-				};
-				case "MISSION" : {
-
-				};
-				case "QUALIFICATION" : {
-
-				};
-			};
-		};
-	};
-}] call CBA_fnc_addPlayerEventHandler;
-
-_playerDeath = ["unit", {
-	if (!Alive player) then {
-		private _practiceStatus = [1,name player] call EFUNC(core,practiceStatus);
-		private _practiceMethod = EGVAR(core,PlayerSettingsTOL) select 0;
-		if (_practiceStatus == 1) then {
-			switch (_practiceMethod) do {
-				case "CONTINIOUS": { 
-					private _countAOs = count EGVAR(core,ActiveAOs);
-					private _AO = EGVAR(core,ActiveAOs) select 0;
-					private _positionAO = getMarkerPOS _AO;
-					if (_countAOs == 0) then { 
-						["TOL"] call EFUNC(core,selectAO);
-					} else {
-						["_positionAO"] call EFUNC(core,CleanUpAO);
-						["TOL"] call EFUNC(core,selectAO);
-					};
-				};
-				case "MISSION" : {
-
-				};
-				case "QUALIFICATION" : {
-
-				};
-			};
-		};
-	};
-}] call CBA_fnc_addPlayerEventHandler;
-
-_getOutHeliCheck = ["vehicle", {
-	if (isNull objectParent player) then {
-		private _practiceStatus = [1,name player] call EFUNC(core,practiceStatus);
-		private _practiceMethod = EGVAR(core,PlayerSettingsTOL) select 0;
-		if (_practiceStatus == 1) then {
-			switch (_practiceMethod) do {
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 				case "CONTINIOUS": {
 					private _AO = EGVAR(core,ActiveAOs) select 0;
 					private _positionAO = getMarkerPOS _AO;
@@ -142,52 +72,23 @@ _getOutHeliCheck = ["vehicle", {
 					};
 				};
 				case "MISSION" : {
-<<<<<<< HEAD
 				};
 				case "QUALIFICATION" : {
 				};
 			};
-=======
-					// This will fill the ACTIVEAO GVAR with the selected AOs for Missions and then setup the AO
-				};
-				case "QUALIFICATION" : {
-					// This will fill the ACTIVEAO GVAR with the selected AOs for  and then setup the AO
-
-				};
-			};
-			
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 		};
 	};
 }] call CBA_fnc_addPlayerEventHandler;
 /* 
-<<<<<<< HEAD
 FUNCTION : landing : [_positionAO] call bad_takeOffAndLanding_fnc_landing
-=======
-
-FUNCTION : landing : [_positionAO] call bad_takeOffAndLanding_fnc_landing
-
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 DESCRIPTION : 
 INPUTS :
 OUTPUTS : 
-<<<<<<< HEAD
 */
 FUNC(landing) = {
 	params ["_positionAO"];
 	TRACE_1("Starting Landing function at position ",_positionAO);
 	hint "New LZ available. Check map.";
-=======
-
-*/
-
-FUNC(landing) = {
-	params ["_positionAO"];
-
-	TRACE_1("Starting Landing function at position ",_positionAO);
-	hint "New LZ available. Check map.";
-
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 	landed = [{
 		params ["_positionAO"];
 		private _veh = vehicle player;
@@ -199,25 +100,11 @@ FUNC(landing) = {
 			[_positionAO] call FUNC(takeoff);
 		};
 	}, 0, _positionAO] call CBA_fnc_addPerFrameHandler;
-<<<<<<< HEAD
-=======
-
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 };
 /* 
-<<<<<<< HEAD
 FUNCTION :  landing : [_positionAO] call bad_takeOffAndLanding_fnc_takeoff
 DESCRIPTION : This the function that handles the distance from the LZ that the vic is to end the exercise. This will also decide how to proceed from here. If continious then it will go back to the selectAO to start the process again. 
 INPUTS : 
-=======
-
-FUNCTION :  landing : [_positionAO] call bad_takeOffAndLanding_fnc_takeoff
-
-DESCRIPTION : This the function that handles the distance from the LZ that the vic is to end the exercise. This will also decide how to proceed from here. If continious then it will go back to the selectAO to start the process again. 
-
-INPUTS : 
-
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 OUTPUTS : 
  */
 FUNC(takeoff) = {
@@ -241,18 +128,9 @@ FUNC(takeoff) = {
 						["TOL"] call EFUNC(core,selectAO);
 					};
 					case "MISSION": {
-<<<<<<< HEAD
 					};
 					case "QUALIFICATION": {
 					};
-=======
-
-					};
-					case "QUALIFICATION": {
-
-					};
-					
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 				};
 			};
 	}, 0,[_veh,_positionAO,_methodPrac]] call CBA_fnc_addPerFrameHandler;

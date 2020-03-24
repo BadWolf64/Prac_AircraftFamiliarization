@@ -1,11 +1,8 @@
 #include "script_component.hpp"
-<<<<<<< HEAD
-GVAR(eiForces) = [];
-=======
 
 GVAR(eiForces) = [];
 
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
+
 GVAR(PlayerSettingsTOL) = [
 	"CONTINIOUS" 	
 	,"DISABLED" 				
