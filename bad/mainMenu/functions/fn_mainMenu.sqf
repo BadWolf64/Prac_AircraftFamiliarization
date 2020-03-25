@@ -9,9 +9,16 @@ GVAR(menus) = [
 	,"InstMenu"
 ];
 /* 
-FUNCTION : 
-DESCRIPTION : 
-INPUTS :
+FUNCTION : activeMenu : [_menu] call bad_mainMenu_fnc_activeMenu
+DESCRIPTION : Used to active the desired menu
+INPUTS : Desired menu called with an int. 
+	0 - Home
+	1 - AC Spawner
+	2 - Auto Rotation
+	3 - Take of and Landing
+	4 - Sling Loading
+	5 - CAS
+	6 - Instructors Menu
 OUTPUTS : 
  */
 FUNC(activeMenu) = {
@@ -37,10 +44,19 @@ FUNC(activeMenu) = {
 		case 3: {
 			[3] call FUNC(TakeOffLanding);
 		};
+		case 4: {
+			[4] call FUNC(SlingLoading);
+		};
+		case 5: {
+			[5] call FUNC(CAS);
+		};
+		case 6: {
+			[6] call FUNC(InstMenu);
+		};
 	};
 };
 /* 
-FUNCTION : 
+FUNCTION : clearMenu : [] call bad_mainMenu_fnc_clearMenu
 DESCRIPTION : 
 INPUTS :
 OUTPUTS : 
@@ -64,7 +80,7 @@ FUNC(clearMenu) = {
 	} forEach _ctrls;
 };
 /* 
-FUNCTION : 
+FUNCTION : playerList : [] call bad_mainMenu_fnc_playerList
 DESCRIPTION : 
 INPUTS :
 OUTPUTS : 
@@ -86,7 +102,7 @@ FUNC(playerList) = {
 	} forEach _playerList;
 };
 /* 
-FUNCTION : 
+FUNCTION : contextualOk : [] call bad_mainMenu_fnc_contextualOk
 DESCRIPTION : 
 INPUTS :
 OUTPUTS : 
@@ -116,11 +132,6 @@ FUNC(contextualOk) = {
 			_menuOK ctrlCommit 0;
 		};
 		case 3: {
-<<<<<<< HEAD
-=======
-			//do nothing for now.
-			// will need to call FUNC(SoloActive)
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 			_menuOK ctrlSetText "Save Settings";
 			_menuOK buttonSetAction "[] call bad_core_fnc_writeToPSTOL";
 			_menuOK ctrlCommit 0;
@@ -128,8 +139,8 @@ FUNC(contextualOk) = {
 	};
 };
 /* 
-FUNCTION : 
-DESCRIPTION : 
+FUNCTION : mainMenuFrame : [] call bad_mainMenu_fnc_mainMenuFrame
+DESCRIPTION : Creates the Tabs and OK/Cancel buttons and framing of the general menu. 
 INPUTS :
 OUTPUTS : 
  */
@@ -189,8 +200,8 @@ FUNC(mainMenuFrame) = {
 	_menuSlingInstructor ctrlCommit 0;
 };
 /* 
-FUNCTION : 
-DESCRIPTION : 
+FUNCTION : Home : [] call bad_mainMenu_fnc_Home
+DESCRIPTION : General menu setup for the given selected menu. Called by activeMenu. 
 INPUTS :
 OUTPUTS : 
  */
@@ -271,8 +282,8 @@ FUNC(Home) = {
 	_checkBoxSolo ctrlAddEventHandler ["CheckedChanged",{[3,name player] call EFUNC(core,togglePractice);}];
 };
 /* 
-FUNCTION : 
-DESCRIPTION : 
+FUNCTION : SpawnAC : [] call bad_mainMenu_fnc_SpawnAC
+DESCRIPTION : General menu setup for the given selected menu. Called by activeMenu. 
 INPUTS :
 OUTPUTS : 
  */
@@ -311,8 +322,8 @@ FUNC(SpawnAC) = {
 	_cb lbSetCurSel 0;
 };
 /* 
-FUNCTION : 
-DESCRIPTION : 
+FUNCTION : Autorotation : [] call bad_mainMenu_fnc_Autorotation
+DESCRIPTION : General menu setup for the given selected menu. Called by activeMenu. 
 INPUTS :
 OUTPUTS : 
  */
@@ -430,8 +441,8 @@ FUNC(Autorotation) = {
 	}];
 };
 /* 
-FUNCTION : 
-DESCRIPTION : 
+FUNCTION : TakeOffLanding : [] call bad_mainMenu_fnc_TakeOffLanding
+DESCRIPTION : General menu setup for the given selected menu. Called by activeMenu. 
 INPUTS :
 OUTPUTS : 
  */
@@ -513,33 +524,32 @@ FUNC(TakeOffLanding) = {
 	} else {
 		_checkBox cbSetChecked false;
 	};
-<<<<<<< HEAD
-	private _settingICD = [1101,1103,1105,1031,1033,1051,1061,1053,1063];
 	{
-=======
-
-	private _settingICD = [1101,1103,1105,1031,1033,1051,1061,1053,1063];
-	{
-		
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 		private _ctrl = ((findDisplay 9999) displayCtrl (_x));
-		private _lbsize = lbSize _ctrl;
-		private _index = -1;
-		private _text = EGVAR(core,PlayerSettingsTOL) select _forEachIndex;
-		for "_index" from 0 to (_lbsize -1) do {
-		if (_ctrl lbText _index isEqualTo (_text)) exitWith {_ctrl lbSetCurSel _index;};
-		};
 	} forEach _settingICD;
-<<<<<<< HEAD
-=======
-
->>>>>>> fff42cf0644dd53b6401f5305a487d99044e3beb
 	private _checkBoxTOL = _display displayCtrl (1011);
 	_checkBoxTOL ctrlAddEventHandler ["CheckedChanged",{[1,name player] call EFUNC(core,togglePractice);}];};
-/*
+/* 
+FUNCTION : SlingLoading : [] call bad_mainMenu_fnc_SlingLoading
+DESCRIPTION : General menu setup for the given selected menu. Called by activeMenu. 
+INPUTS :
+OUTPUTS : 
+ */
 FUNC(SlingLoading) = {
 };
+/* 
+FUNCTION : CAS : [] call bad_mainMenu_fnc_CAS
+DESCRIPTION : General menu setup for the given selected menu. Called by activeMenu. 
+INPUTS :
+OUTPUTS : 
+ */
 FUNC(CAS) = {
 };
+/* 
+FUNCTION : CAS : [] call bad_mainMenu_fnc_CAS
+DESCRIPTION : General menu setup for the given selected menu. Called by activeMenu. 
+INPUTS :
+OUTPUTS : 
+ */
 FUNC(InstMenu) = {
-}; */
+};
