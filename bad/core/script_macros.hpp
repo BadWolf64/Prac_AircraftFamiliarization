@@ -34,7 +34,3 @@
 #undef XEH_POST_CINIT
 #undef XEH_POST_SINIT
 #undef PATHTO_FNC
-#define PATHTO_FNC(func) class func {\
-    file = QUOTE(DOUBLES(fnc,func).sqf);\
-    RECOMPILE;\
-}

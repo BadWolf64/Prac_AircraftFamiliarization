@@ -1,4 +1,5 @@
 setViewDistance 2500;
+
 if (hasInterface) then {
     [] spawn {
         waitUntil {alive player};
@@ -11,10 +12,14 @@ if (hasInterface) then {
         }];
     };
 };
+
+//PV_playerPracticeStatus = [[player,flight,autorotate status,takeoffLanding status,slingload status]],
+
 if(isNil "PV_playerPracticeStatus") then {
     PV_playerPracticeStatus = [];
     publicVariable "PV_playerPracticeStatus";
 };
+
 ["disconnect", "onPlayerDisconnected", {
     private _player = _this select 2;
     private _practiceStatus = missionNamespace getVariable "PV_playerPracticeStatus";

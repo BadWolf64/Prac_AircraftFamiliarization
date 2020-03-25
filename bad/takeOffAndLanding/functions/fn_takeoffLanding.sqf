@@ -1,17 +1,26 @@
 #include "script_component.hpp"
+
 _waveOff = ["Wave Off", "<t color='#E70000'>Wave Off LZ</t>", "", {
 			private _AO = EGVAR(core,ActiveAOs) select 0;
 			private _positionAO = getMarkerPOS _AO;
 			[_positionAO] call bad_takeOffAndLanding_fnc_takeoff;
 		}, {if ([player] call CBA_fnc_vehicleRole == "driver" && [1,name player] call bad_core_fnc_practiceStatus == 1)then{true}else{false};}, {}, [], [], 0] call ace_interact_menu_fnc_createAction;
 	["CAManBase", 1, ["ACE_SelfActions"], _waveOff, true] call ace_interact_menu_fnc_addActionToClass;
+
 /* 
+
 FUNCTION : InitializeTOL - CBA Eventhandler
+
 DESCRIPTION : Single function that calls the other functions when TOL practice is enabled when a player gets in a helicopter. 
+
 INPUTS :
+
 OUTPUTS : 
+
 NOTE : This should be a switch and it can then be used to command any of the practices to work depending on what is selected. 
+
 */
+
 _inHeliCheckTOL = ["vehicle", {
 	if ((driver (vehicle player)) isEqualTo player && (vehicle player) isKindOf "Helicopter") then {
 		private _practiceStatus = [1,name player] call EFUNC(core,practiceStatus);
@@ -25,13 +34,16 @@ _inHeliCheckTOL = ["vehicle", {
 					};
 				};
 				case "MISSION" : {
+
 				};
 				case "QUALIFICATION" : {
+
 				};
 			};
 		};
 	};
 }] call CBA_fnc_addPlayerEventHandler;
+
 _playerDeath = ["unit", {
 	if (!Alive player) then {
 		private _practiceStatus = [1,name player] call EFUNC(core,practiceStatus);
@@ -50,13 +62,16 @@ _playerDeath = ["unit", {
 					};
 				};
 				case "MISSION" : {
+
 				};
 				case "QUALIFICATION" : {
+
 				};
 			};
 		};
 	};
 }] call CBA_fnc_addPlayerEventHandler;
+
 _getOutHeliCheck = ["vehicle", {
 	if (isNull objectParent player) then {
 		private _practiceStatus = [1,name player] call EFUNC(core,practiceStatus);
@@ -72,23 +87,36 @@ _getOutHeliCheck = ["vehicle", {
 					};
 				};
 				case "MISSION" : {
+					// This will fill the ACTIVEAO GVAR with the selected AOs for Missions and then setup the AO
 				};
 				case "QUALIFICATION" : {
+					// This will fill the ACTIVEAO GVAR with the selected AOs for  and then setup the AO
+
 				};
 			};
+			
 		};
 	};
 }] call CBA_fnc_addPlayerEventHandler;
+
 /* 
+
 FUNCTION : landing : [_positionAO] call bad_takeOffAndLanding_fnc_landing
+
 DESCRIPTION : 
+
 INPUTS :
+
 OUTPUTS : 
+
 */
+
 FUNC(landing) = {
 	params ["_positionAO"];
+
 	TRACE_1("Starting Landing function at position ",_positionAO);
 	hint "New LZ available. Check map.";
+
 	landed = [{
 		params ["_positionAO"];
 		private _veh = vehicle player;
@@ -100,13 +128,21 @@ FUNC(landing) = {
 			[_positionAO] call FUNC(takeoff);
 		};
 	}, 0, _positionAO] call CBA_fnc_addPerFrameHandler;
+
 };
+
 /* 
+
 FUNCTION :  landing : [_positionAO] call bad_takeOffAndLanding_fnc_takeoff
+
 DESCRIPTION : This the function that handles the distance from the LZ that the vic is to end the exercise. This will also decide how to proceed from here. If continious then it will go back to the selectAO to start the process again. 
+
 INPUTS : 
+
 OUTPUTS : 
+
  */
+
 FUNC(takeoff) = {
 	params["_positionAO"];
 	TRACE_1("Starting Takeoff function at position ",_positionAO);
@@ -128,9 +164,12 @@ FUNC(takeoff) = {
 						["TOL"] call EFUNC(core,selectAO);
 					};
 					case "MISSION": {
+
 					};
 					case "QUALIFICATION": {
+
 					};
+					
 				};
 			};
 	}, 0,[_veh,_positionAO,_methodPrac]] call CBA_fnc_addPerFrameHandler;

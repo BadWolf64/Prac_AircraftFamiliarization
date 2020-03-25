@@ -1,12 +1,20 @@
 #include "script_component.hpp"
 #include "settingsAO.hpp"
+
 GVAR(ActiveAOs) = [];
+
 /* 
+
 FUNCTION : cleanUpWrecks : [] call bad_core_fnc_cleanUpWrecks
+
 DESCRIPTION : Cleans up the wrecks and empty helicopters and plans on the server. 
+
 INPUTS : NA
+
 OUTPUTS : NA
+
  */
+
 FUNC(cleanUpWrecks) = {
 	{ deleteVehicle _x } forEach allDead;
 	_vehicles = nearestObjects [player, ["helicopter","plane"], 9999]; 
@@ -14,17 +22,32 @@ FUNC(cleanUpWrecks) = {
 	if (count crew vehicle _x == 0) then {deleteVehicle _x}; 
 	} forEach _vehicles;
 };
+
 /* 
+
 FUNCTION : selectAO : [] call bad_core_fnc_selectAO
+
 DESCRIPTION : Will find the LZ that is within a certain range and also within a certain directional arch of the player position once they exit the AO. 
+
 INPUTS : Type of pracprac
+
 OUTPUTS : 
+
 */
+
 FUNC(selectAO) = {
+
 	params["_pracType"];
+
+	private _AOs = [];
 	private _teleport = GVAR(PlayerSettingsTOL) select 1;
 	private _heal = GVAR(PlayerSettingsTOL) select 2;
+
 	if (_pracType == "TOL") then {
+		private _AOtype = GVAR(PlayerSettingsTOL) select 3;
+		private _prefixLZ = nil;
+		private _posPlayer = getPosWorld Player;
+
 		switch (_AOtype) do {
 			case "OPEN": {
 				_prefixLZ = "LZ_OPEN";
@@ -67,7 +90,9 @@ FUNC(selectAO) = {
 	GVAR(ActiveAOs) pushBack _AO;
 	private _positionAO = getMarkerPos _AO;
 	[_positionAO,_pracType] call FUNC(setupAO);
+	
 	TRACE_1("_teleport value ",_teleport);
+
 	if (_teleport == "ENABLED") then {
 		private _veh = vehicle player;
 		_veh setVehiclePosition [[(_positionAO select 0) - TELEPORT_DIST * sin (random 359),(_positionAO select 1) - TELEPORT_DIST * cos (random 359),(_positionAO select 2)+100],[],100,"FLY"];
@@ -75,26 +100,41 @@ FUNC(selectAO) = {
 		_veh setDir _dir;
 		openMap true;
 	};
+
 	TRACE_1("_heal value ",_heal);
+
 	if (_heal == "ENABLED") then {
 		[] call FUNC(fullHeal);
 		[] call FUNC(rearm);
 		[] call FUNC(repair);
 	};
 };
+
+
+
 /* 
+
 FUNCTION : setupAO : ['_prefixLZ'] call bad_core_fnc_setupAO
+
 DESCRIPTION :  Sets up the AO for the take off and landing system, the CAS system and the mission system. 
 	Depending on the type of AO the options for how the AO will be configured are determined by GVAR
 		In the case of TOL - GVAR(PlayerSettingsTOL)
 		In the case of CAS - GVAR(playerSettingsCAS)
+
 INPUTS : _prefixLZ - CAS or TOL 
+
 OUTPUTS : 
+
  */
+
 FUNC(setupAO) ={
+
 	params["_positionAO","_pracType"];
+	
 	TRACE_1("AO Position ",_positionAO);
+
 	private _suffix = nil;
+
 	switch (_pracType) do {
 		case "TOL": { 
 			private _teleport = GVAR(PlayerSettingsTOL) select 1;
@@ -103,11 +143,15 @@ FUNC(setupAO) ={
 			private _text = [];
 			private _positionMarker = nil;
 			_suffix = "LZ";
+
+			//markers
+
 			switch (_markersTOL) do {
 				case "LZ EXACT + AO": {
 					_text pushBack AO_ELIPSE;
 					_text pushBack MARKER_LZ;
 					_positionMarker = _positionAO
+
 				};
 				case "LZ EXACT ONLY": {
 					_text pushBack MARKER_LZ;
@@ -123,6 +167,7 @@ FUNC(setupAO) ={
 				private _str = format [_x,name player,_positionMarker,_suffix];
 				TRACE_1("String passed to stringToMarker Function",_str);
 				_markerAO = [_str] call BIS_fnc_stringToMarker;
+				
 			} forEach _text;
 			TRACE_1("Practice ei ",_ei);
 			if (_ei == "ENABLED") then {
@@ -137,16 +182,26 @@ FUNC(setupAO) ={
 	};
 	[_positionAO,_pracType] call FUNC(createItems);
 };
+
 /* 
+
 FUNCTION : 
+
 DESCRIPTION : 
+
 INPUTS :
+
 OUTPUTS : 
+
  */
+
 FUNC(oppositionEI) = {
+
 	params["_positionAO","_pracType"];
+
 	TRACE_1("Inside of EiSpawner ",_positionAO);
 	TRACE_1("Inside of EiSpawner ",_pracType);
+	
 	Private _eiVics = GVAR(PlayerSettingsTOL) select 6;
 	TRACE_1("Outside Switch ",_eiVics);
 	Private _eiAmount = GVAR(PlayerSettingsTOL) select 7;
@@ -160,6 +215,7 @@ FUNC(oppositionEI) = {
 	Private _infArrayAll = [];
 	Private _vicArrayAll = [];
 	Private _spawnRad = 1000;
+
 	switch (_pracType) do {
 		case "TOL": {
 			TRACE_1("Inside Switch ",_eiVics);
@@ -200,6 +256,7 @@ FUNC(oppositionEI) = {
 			TRACE_1(" ",_vicArray);
 		};
 		case "CAS": {
+			// Not yet implemented. Will be similar to the above. 
 		};
 	};
 	for "_i" from 1 to _infCount do {
@@ -208,6 +265,7 @@ FUNC(oppositionEI) = {
 	for "_i" from 1 to _vicCount do {
 		_vicArrayAll append _vicArray;
 	};
+
 	{
 		Private _posEI = [(_positionAO select 0) - (random [400,750,_spawnRad]) * sin (random 359),(_positionAO select 1) - (random [200,400,_spawnRad]) * cos (random 359),0];
 		Private _groupAI = [ _posEI, EAST, _x] call BIS_fnc_spawnGroup;
@@ -219,6 +277,7 @@ FUNC(oppositionEI) = {
 		_wp setWaypointType "MOVE";
 		_groupAI setCombatMode "RED";
 	} forEach _infArrayAll;
+
 	{
 		Private _posEI = [(_positionAO select 0) - (random [SPAWN_RAD_MIN,SPAWN_RAD_MEAN,SPAWN_RAD_MAX]) * sin (random 359),(_positionAO select 1) - (random [SPAWN_RAD_MIN,SPAWN_RAD_MEAN,SPAWN_RAD_MAX]) * cos (random 359),0];
 		Private _vicAI = [_posEI, 0, _x , EAST] call BIS_fnc_spawnVehicle;
@@ -232,14 +291,23 @@ FUNC(oppositionEI) = {
 		_groupAI setCombatMode "RED";
 	} forEach _vicArrayAll;
 };
+
 /* 
+
 FUNCTION : 
+
 DESCRIPTION : 
+
 INPUTS :
+
 OUTPUTS : 
+
  */
+
 FUNC(createItems) = {
+
 	params["_positionAO","_pracType"];
+
 	private _light = nil;
 	private _smoke = nil;
 	switch (_pracType) do {
@@ -254,13 +322,21 @@ FUNC(createItems) = {
 	private _smokeCreate = _smoke createVehicle _SmokeChemSpawn;
 	private _lightCreate = _light createVehicle _SmokeChemSpawn;
 };
+
 /* 
+
 FUNCTION : CleanUpAO : [_positionAO] call bad_core_fnc_CleanUpAO
+
 DESCRIPTION : 
+
 INPUTS :
+
 OUTPUTS : 
+
 NOTE : 
+
 */
+
 FUNC(CleanUpAO) ={
 	params ["_positionAO"];
 	TRACE_1("Clean up on aisle ", _positionAO);
