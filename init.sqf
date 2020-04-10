@@ -15,6 +15,10 @@ if(isNil "PV_playerPracticeStatus") then {
     PV_playerPracticeStatus = [];
     publicVariable "PV_playerPracticeStatus";
 };
+if(isNil "PV_flights") then {
+    PV_flights = [];
+    publicVariable "PV_flights";
+};
 ["disconnect", "onPlayerDisconnected", {
     private _player = _this select 2;
     private _practiceStatus = missionNamespace getVariable "PV_playerPracticeStatus";

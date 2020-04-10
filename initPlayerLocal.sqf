@@ -3,6 +3,10 @@ _openMenu = ["MainMenu", "<t color='#2eed15'>Main Menu</t>", "", {[0] call bad_m
 _practiceStatus = missionNamespace getVariable "PV_playerPracticeStatus";
 _playerName = name player;
 _group = str group player;
-_practiceStatus pushBack [_playerName,_group,[0,0,0,0]];
+_practiceStatus pushBack [_playerName,_group,[0,0,0,0],_playerName];
 PV_playerPracticeStatus = _practiceStatus;
 publicVariable "PV_playerPracticeStatus";
+_allFlights = missionNamespace getVariable "PV_flights";
+_allFlights pushBack [_playerName,[_playerName]];
+PV_flights = _allFlights;
+publicVariable "PV_flights";
