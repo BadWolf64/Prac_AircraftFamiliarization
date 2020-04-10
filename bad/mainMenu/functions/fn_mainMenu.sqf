@@ -459,6 +459,8 @@ FUNC(TakeOffLanding) = {
 	private _practiceStatus = [
 		["_practiceEnabled","RscText",0.34,0.05,"Takeoff Landing Practice Enabled:",""]
 		,["_playerAutoroation","RscCheckBox",0.05,0.05,"",""]
+		,["_soloEnabled","RscText",0.34,0.05,"Solo Practice Enabled:",""]
+		,["_playerSolo","RscCheckBox",0.05,0.05,"",""]
 	];
 	private _AOSetupTitleFrame = [
 		["_AOSetupTitle","RscText",0.15,0.05,"AO Options:",""]
@@ -518,17 +520,23 @@ FUNC(TakeOffLanding) = {
 	[_menu,_missionSetup2,0.30,0.69,9] call FUNC(Verticle);
 	[_menu,_rightFrame,0.76,0.01,10] call FUNC(Verticle);
 	private _status = [1,name player] call EFUNC(core,practiceStatus);
-	private _checkBox = ((findDisplay 9999) displayCtrl (1011));
+	private _checkBoxTOL = ((findDisplay 9999) displayCtrl (1011));
 	if (_status == 1) then {
-		_checkBox cbSetChecked true;
+		_checkBoxTOL cbSetChecked true;
 	} else {
-		_checkBox cbSetChecked false;
+		_checkBoxTOL cbSetChecked false;
 	};
-	{
-		private _ctrl = ((findDisplay 9999) displayCtrl (_x));
-	} forEach _settingICD;
-	private _checkBoxTOL = _display displayCtrl (1011);
-	_checkBoxTOL ctrlAddEventHandler ["CheckedChanged",{[1,name player] call EFUNC(core,togglePractice);}];};
+	private _checkBoxSolo = ((findDisplay 9999) displayCtrl (1013));
+	private _soloCurrentStatus = [3,name player] call EFUNC(core,practiceStatus);
+	if (_soloCurrentStatus == 0) then {
+			_checkBoxSolo cbSetChecked false;
+		} else {
+			_checkBoxSolo cbSetChecked true;
+	};
+	_checkBoxTOL ctrlAddEventHandler ["CheckedChanged",{[1,name player] call EFUNC(core,togglePractice);}];
+	_checkBoxSolo ctrlAddEventHandler ["CheckedChanged",{[3,name player] call EFUNC(core,togglePractice);}];
+};
+
 /* 
 FUNCTION : SlingLoading : [] call bad_mainMenu_fnc_SlingLoading
 DESCRIPTION : General menu setup for the given selected menu. Called by activeMenu. 
