@@ -6,7 +6,9 @@ if (hasInterface) then {
             [] spawn {
                 sleep 0.5;
                 [player] call potato_assignGear_fnc_assignGearMan;
-                [] call potato_markers_initMarkerHash;
+                {
+                    ["potato_adminMenu_resetMarkers", [_x], [_x]] call CBA_fnc_targetEvent;
+                } forEach allPlayers;
             };
         }];
     };
