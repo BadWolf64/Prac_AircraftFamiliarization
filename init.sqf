@@ -26,4 +26,6 @@ if(isNil "PV_flights") then {
     _practiceStatus deleteAt _index;
     PV_playerPracticeStatus = _practiceStatus;
     publicVariable "PV_playerPracticeStatus";
+
+    // Need to add remove from flight also for clean up. 
 }] call BIS_fnc_addStackedEventHandler;

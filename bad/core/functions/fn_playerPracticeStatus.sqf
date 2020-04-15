@@ -41,13 +41,15 @@ FUNC(getPracticeStatusAll) = {
 		,1051 
 		,1052 
 		,1032
+		,1110
+		,1111
+		,1112
 		];
 	private _player = name player;
     private _practiceStatus = missionNamespace getVariable "PV_playerPracticeStatus";
     private _index = _practiceStatus findif {_x select 0 == _player};
 	private _playerArray = _practiceStatus select _index;
 	private _playerCurrentStatus = _playerArray select 2;
-	private _playerCurrentFlight = _playerArray select 3;
 	{
 		private _checkBox = ((findDisplay 9999) displayCtrl (_x));
 		private _selectedPractice = _availablePractices select _forEachIndex;
@@ -58,8 +60,6 @@ FUNC(getPracticeStatusAll) = {
 			_checkBox cbSetChecked true;
 		};
 	} forEach _availablePractices;
-	private _ctrl = ((findDisplay 9999) displayCtrl (1031));
-	_ctrl ctrlSetText _playerCurrentFlight;
 };
 /* 
 FUNCTION : 

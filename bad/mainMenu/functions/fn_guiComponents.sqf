@@ -101,6 +101,9 @@ FUNC(ctrlSwitch) = {
 		case "RscXListBox": {
 			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadXListBox);
 		};
+		case "RscListBoxMulti": {
+			[_ctrlCreate,_ctrltext,_ctrlfunction,_idc] call FUNC(BadListBoxMulti);
+		};
 	};
 };
 /* 
@@ -143,6 +146,11 @@ OUTPUTS :
  */
 FUNC(BadListbox) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
+	lbCLear _ctrlCreate;
+	{
+		_ctrlCreate lbAdd _x;
+	} forEach _ctrltext;
+	_ctrlCreate lbSetCurSel 0;
 };
 /* 
 FUNCTION : 
@@ -211,6 +219,20 @@ INPUTS :
 OUTPUTS : 
  */
 FUNC(BadXListBox) = {
+	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
+	lbCLear _ctrlCreate;
+	{
+		_ctrlCreate lbAdd _x;
+	} forEach _ctrltext;
+	_ctrlCreate lbSetCurSel 0;
+};
+/* 
+FUNCTION : 
+DESCRIPTION : 
+INPUTS :
+OUTPUTS : 
+ */
+FUNC(BadListBoxMulti) = {
 	params["_ctrlCreate","_ctrltext","_ctrlfunction","_idc"];
 	lbCLear _ctrlCreate;
 	{
