@@ -111,6 +111,7 @@ FUNC(flightMembersMenuList) = {
 	params["_display","_idcLB","_idcHeader"];
 	private _allFlights = missionNamespace getVariable "PV_flights";
 	private _ctrlLB = _display displayCtrl _idcLB;
+	if(count _allFlights == 0) exitWith {lbCLear _ctrlLB};
 	private _ctrlHeader = _display displayCtrl _idcHeader;
 	private _index = lbCurSel _ctrlHeader;
 	private _flightArray = _allFlights select _index;
@@ -119,8 +120,8 @@ FUNC(flightMembersMenuList) = {
 		lbCLear _ctrlLB;
 		_ctrlLB lbAdd "Flight Empty";
 	} else {
+		lbCLear _ctrlLB;
 		{
-			lbCLear _ctrlLB;
 			_ctrlLB lbAdd _x;
 			_ctrlLB lbSetData [_forEachIndex,_x];
 		} forEach _playersInFlight;
@@ -286,10 +287,10 @@ FUNC(Home) = {
 		["_editFlightNameTitle","RscText",0.25,0.05,"Create/Edit FLT",""]
 		,["_editFlightName","RscEdit",0.25,0.05,"",""]
 		,["_editFlightLeaderTitle","RscText",0.25,0.05,"FLT Leader",""]
-		,["_editFlightLeader","RscCombo",0.25,0.05,["Placeholder","Placeholder"],""]
+		,["_editFlightLeader","RscCombo",0.25,0.05,[],""]
 		,["_editFlightPracticeTitle","RscText",0.25,0.05,"FLT Active Practice",""]
 		,["_flightPracticeListLB","RscCombo",0.25,0.05,["TOL","CAS"],""]
-		,["_editFlightDelete","RscButton",0.25,0.05,"Delete Group",""]
+		,["_editFlightDelete","RscButton",0.25,0.05,"Delete Group","[] call bad_core_fnc_deleteFlight"]
 		,["_editFlightConfirm","RscButton",0.25,0.05,"Confirm","[] call bad_core_fnc_createFlight"]
 	];
 	private _controlsButtons = [
@@ -318,6 +319,13 @@ FUNC(Home) = {
 	private _display = findDisplay 9999;
 	[_display,1071,1070] call FUNC(flightMembersMenuList);
 	[_display,1061] call FUNC(playerList);
+	private _ctrlLB = _display displayCtrl(1081);
+	private _ctrlText = ctrlText _ctrlLB;
+	private _flightMembers = [_ctrlText] call EFUNC(core,flightMembersFlight);
+	{
+		_ctrlLB lbAdd _x;
+		_ctrlLB lbSetData [_forEachIndex,_x];
+	}forEach _flightMembers;
 
 	//Can be put in a forEach Loop. 
 	private _checkBoxAuto = _display displayCtrl (1050);
@@ -334,6 +342,8 @@ FUNC(Home) = {
 	_checkBoxCAP ctrlAddEventHandler ["CheckedChanged",{[5,name player] call EFUNC(core,togglePractice);}];
 	private _checkBoxUAV = _display displayCtrl (1112);
 	_checkBoxUAV ctrlAddEventHandler ["CheckedChanged",{[6,name player] call EFUNC(core,togglePractice);}];
+	private _flightNameEdit = _display displayCtrl (1081);
+	_flightNameEdit ctrlAddEventHandler ["SetFocus",{(_this select 0) ctrlSetText "";}];
 	private _flightMemberList = _display displayCtrl (1070);
 	_flightMemberList ctrlAddEventHandler ["LBSelChanged",{[] call EFUNC(core,flightRefresh);}];
 	[] call EFUNC(core,flightRefresh);

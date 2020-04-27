@@ -59,6 +59,7 @@ FUNC(moveToFlight) = {
 	private _ctrlFlightMembersHeader = _display displayCtrl(1070);
 	private _flight = _ctrlFlightMembersHeader lbText lbCurSel _ctrlFlightMembersHeader;
 	private _currentFlights = missionNamespace getVariable "PV_flights";
+	if (count _currentFlights == 0) exitWith {};
 	private _flightArrayindex = _currentFlights findif {_x select 0 == _flight};
 	private _flightArray = _currentFlights select _flightArrayindex;
 	private _flightMemberArray = _flightArray select 3;
@@ -95,15 +96,35 @@ FUNC(activateFlightPractice) = {
 
 };
 /* 
-FUNCTION : flightMembers :
+FUNCTION : flightMembersPlayer :
 DESCRIPTION : 
 INPUTS :
 OUTPUTS : 
 */
-FUNC(flightMembers) = {
+FUNC(flightMembersPlayer) = {
 	params["_player"];
-
-
+	private _currentFlights = missionNamespace getVariable "PV_flights";
+	if (count _currentFlights == 0) exitWith {};
+	private _playerFlight = [_player] call FUNC(getFlight);
+	private _currentFlightIndex = _currentFlights findif {_x select 0 == _playerFlight};
+	private _currentFlightArray = _currentFlights select _currentFlightIndex;
+	private _memberArray = _currentFlightArray select 3;
+	_memberArray;
+};
+/* 
+FUNCTION : flightMembersFlight :
+DESCRIPTION : 
+INPUTS :
+OUTPUTS : 
+*/
+FUNC(flightMembersFlight) = {
+	params["_flight"];
+	private _currentFlights = missionNamespace getVariable "PV_flights";
+	if (count _currentFlights == 0) exitWith {[]};
+	private _currentFlightIndex = _currentFlights findif {_x select 0 == _flight};
+	private _currentFlightArray = _currentFlights select _currentFlightIndex;
+	private _memberArray = _currentFlightArray select 3;
+	_memberArray;
 };
 /* 
 FUNCTION : flightRefresh :
@@ -114,15 +135,27 @@ OUTPUTS :
 FUNC(flightRefresh) = {
 	Private _display = findDisplay 9999;
 	private _ctrlFlightMembersHeader = _display displayCtrl(1070);
-	private _ctrlFlightMembersHeaderText = _ctrlFlightMembersHeader lbText lbCurSel _ctrlFlightMembersHeader;
 	private _ctrlFightNameEditBox = _display displayCtrl(1081);
-	_ctrlFightNameEditBox ctrlSetText _ctrlFlightMembersHeaderText;
+	private _ctrlFightLeaderListBox = _display displayCtrl(1083);
 	private _flightList = [] call FUNC(allFlights);
 	lbCLear _ctrlFlightMembersHeader;
 	{
 		_ctrlFlightMembersHeader lbAdd _x;
 	} forEach _flightList;
+	private _ctrlFlightMembersHeaderText = _ctrlFlightMembersHeader lbText lbCurSel _ctrlFlightMembersHeader;
+	_ctrlFightNameEditBox ctrlSetText _ctrlFlightMembersHeaderText;
 	[_display,1071,1070] call EFUNC(mainMenu,flightMembersMenuList);
+	private _playerFlightCtrl = _display displayCtrl 1031;
+	private _playerFlight = [name player] call FUNC(getFlight);
+	_playerFlightCtrl ctrlSetText _playerFlight;
+	private _memberListEditFLightLeader = [_ctrlFlightMembersHeaderText] call EFUNC(core,flightMembersFlight);
+	// Add if check in here to see if the list has any members if not exit. 
+	if(count _memberListEditFLightLeader != 0) then {
+		lbCLear _ctrlFightLeaderListBox;
+		{
+			_ctrlFightLeaderListBox lbAdd _x;
+		} forEach _memberListEditFLightLeader;
+	};
 };
 /* 
 FUNCTION : allFlights :
@@ -134,7 +167,7 @@ FUNC(allFlights) = {
 	private _flights = missionNamespace getVariable "PV_flights";
 	private _allFlights = [];
 	if(count _flights == 0) then {
-		_allFlights = ["NewFlight"];
+		_allFlights = ["New Flight"];
 	} else {
 		{
 			_flightName = _x select 0; 
@@ -142,6 +175,34 @@ FUNC(allFlights) = {
 		} forEach _flights;
 	};
 	_allFlights;
+};
+/* 
+FUNCTION : deleteFlight :
+DESCRIPTION : 
+INPUTS :
+OUTPUTS : 
+*/
+FUNC(deleteFlight) = {
+	private _display = findDisplay 9999;
+	private _flightNameCtrl = _display displayctrl 1070;
+	private _flights = missionNamespace getVariable "PV_flights";
+	if (count _flights == 0) exitWith {};
+	private _flightNameCtrlCurrenIndex = lbCurSel _flightNameCtrl;
+	private _flightName =_flightNameCtrl lbText _flightNameCtrlCurrenIndex;
+	TRACE_1("Flight",_flightName);
+	private _flightMembersCtrl = _display displayctrl 1071;
+	private _flightMemberEmpty = _flightMembersCtrl lbText 0;
+	if (_flightMemberEmpty == "Flight Empty") then {
+		private _flightArrayindex = _flights findif {_x select 0 == _flightName};
+		_flights deleteAt _flightArrayindex;
+		PV_flights = _flights;
+		TRACE_1("New FLights PV",PV_flights);
+		publicVariable "PV_flights";
+		_flightNameCtrl lbSetCurSel 0;
+	} else {
+		hint "Flight is not empty, cannot delete.";
+	};
+	[] call FUNC(flightRefresh);
 };
 /* 
 FUNCTION : leaveCurrentFlight :
