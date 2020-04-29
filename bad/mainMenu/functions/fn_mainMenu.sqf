@@ -159,7 +159,7 @@ FUNC(contextualOk) = {
 		};
 		case 3: {
 			_menuOK ctrlSetText "Save Settings";
-			_menuOK buttonSetAction "[] call bad_core_fnc_writeToPSTOL";
+			_menuOK buttonSetAction "[] call bad_core_fnc_writeToPSTOL;[] call bad_core_fnc_writeToPS";
 			_menuOK ctrlCommit 0;
 		};
 	};

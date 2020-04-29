@@ -23,10 +23,10 @@ OUTPUTS :
 FUNC(selectAO) = {
 	params["_pracType"];
 	private _AOs = [];
-	private _teleport = GVAR(PlayerSettingsTOL) select 1;
-	private _heal = GVAR(PlayerSettingsTOL) select 2;
+	private _teleport = GVAR(playerSettings) select 0;
+	private _heal = GVAR(playerSettings) select 1;
 	if (_pracType == "TOL") then {
-		private _AOtype = GVAR(PlayerSettingsTOL) select 3;
+		private _AOtype = GVAR(PlayerSettingsTOL) select 1;
 		private _prefixLZ = nil;
 		private _posPlayer = getPosWorld Player;
 		switch (_AOtype) do {
@@ -101,9 +101,9 @@ FUNC(setupAO) ={
 	private _suffix = nil;
 	switch (_pracType) do {
 		case "TOL": { 
-			private _teleport = GVAR(PlayerSettingsTOL) select 1;
-			private _markersTOL = GVAR(PlayerSettingsTOL) select 4;
-			private _ei = GVAR(PlayerSettingsTOL) select 5;
+			private _teleport = GVAR(playerSettings) select 0;
+			private _markersTOL = GVAR(PlayerSettingsTOL) select 2;
+			private _ei = GVAR(PlayerSettingsTOL) select 3;
 			private _text = [];
 			private _positionMarker = nil;
 			_suffix = "LZ";
@@ -160,9 +160,9 @@ FUNC(oppositionEI) = {
 	Private _spawnRad = 1000;
 	switch (_pracType) do {
 		case "TOL": {
-			Private _eiVics = GVAR(PlayerSettingsTOL) select 6;
-			Private _eiAmount = GVAR(PlayerSettingsTOL) select 7;
-			Private _eiDifficulty = GVAR(PlayerSettingsTOL) select 8;
+			Private _eiVics = GVAR(PlayerSettingsTOL) select 4;
+			Private _eiAmount = GVAR(PlayerSettingsTOL) select 5;
+			Private _eiDifficulty = GVAR(PlayerSettingsTOL) select 6;
 			TRACE_1("Inside Switch ",_eiVics);
 			if(_eiVics == "ENABLED") then {
 				_vicCount = 1;
