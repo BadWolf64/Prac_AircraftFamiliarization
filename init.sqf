@@ -5,8 +5,13 @@ if (hasInterface) then {
         player addEventHandler ["Respawn", {
             [] spawn {
                 sleep 0.5;
+
                 [ACE_PLAYER] call potato_assignGear_fnc_assignGearMan;
                 [ACE_PLAYER] call potato_markers_initMarkerHash;
+                [player] call potato_assignGear_fnc_assignGearMan;
+                {
+                    ["potato_adminMenu_resetMarkers", [_x], [_x]] call CBA_fnc_targetEvent;
+                } forEach allPlayers;
             };
         }];
     };
