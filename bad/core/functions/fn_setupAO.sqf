@@ -22,9 +22,13 @@ OUTPUTS :
 */
 FUNC(selectAO) = {
 	params["_pracType"];
-	private _AOs = [];
-	private _teleport = GVAR(playerSettings) select 0;
-	private _heal = GVAR(playerSettings) select 1;
+  
+	private _teleport = GVAR(PlayerSettingsTOL) select 1;
+	private _heal = GVAR(PlayerSettingsTOL) select 2;
+	private _AOtype = GVAR(PlayerSettingsTOL) select 3;
+	private _prefixLZ = nil;
+	private _AOs = nil;
+
 	if (_pracType == "TOL") then {
 		private _AOtype = GVAR(PlayerSettingsTOL) select 1;
 		private _prefixLZ = nil;
