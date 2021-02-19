@@ -23,15 +23,13 @@ OUTPUTS :
 FUNC(selectAO) = {
 	params["_pracType"];
   
-	private _teleport = GVAR(PlayerSettingsTOL) select 1;
-	private _heal = GVAR(PlayerSettingsTOL) select 2;
-	private _AOtype = GVAR(PlayerSettingsTOL) select 3;
+	private _teleport = GVAR(playerSettings) select 0;
+	private _heal = GVAR(playerSettings) select 1;
 	private _prefixLZ = nil;
 	private _AOs = nil;
 
 	if (_pracType == "TOL") then {
 		private _AOtype = GVAR(PlayerSettingsTOL) select 1;
-		private _prefixLZ = nil;
 		private _posPlayer = getPosWorld Player;
 		switch (_AOtype) do {
 			case "OPEN": {
@@ -63,6 +61,7 @@ FUNC(selectAO) = {
 			_AOs sort false;
 			private _emptyElements = _AOs find "";
 			_AOs resize _emptyElements;
+			TRACE_1("All MapMarkers of Prefix",_AOs);
 			if (count _AOs == 0) then {
 				_AOs = allMapMarkers select {_x find _prefixLZ isEqualTo 0};
 			};
