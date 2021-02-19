@@ -102,6 +102,32 @@ FUNC(playerList) = {
 	} forEach _playerList;
 };
 /* 
+FUNCTION : flightMembersMenuList :
+DESCRIPTION : 
+INPUTS :
+OUTPUTS : 
+*/
+FUNC(flightMembersMenuList) = {
+	params["_display","_idcLB","_idcHeader"];
+	private _allFlights = missionNamespace getVariable "PV_flights";
+	private _ctrlLB = _display displayCtrl _idcLB;
+	if(count _allFlights == 0) exitWith {lbCLear _ctrlLB};
+	private _ctrlHeader = _display displayCtrl _idcHeader;
+	private _index = lbCurSel _ctrlHeader;
+	private _flightArray = _allFlights select _index;
+	private _playersInFlight = _flightArray select 3;
+	if(count _playersInFlight == 0) then {
+		lbCLear _ctrlLB;
+		_ctrlLB lbAdd "Flight Empty";
+	} else {
+		lbCLear _ctrlLB;
+		{
+			_ctrlLB lbAdd _x;
+			_ctrlLB lbSetData [_forEachIndex,_x];
+		} forEach _playersInFlight;
+	}; 
+};
+/* 
 FUNCTION : contextualOk : [] call bad_mainMenu_fnc_contextualOk
 DESCRIPTION : 
 INPUTS :
@@ -133,7 +159,7 @@ FUNC(contextualOk) = {
 		};
 		case 3: {
 			_menuOK ctrlSetText "Save Settings";
-			_menuOK buttonSetAction "[] call bad_core_fnc_writeToPSTOL";
+			_menuOK buttonSetAction "[] call bad_core_fnc_writeToPSTOL;[] call bad_core_fnc_writeToPS";
 			_menuOK ctrlCommit 0;
 		};
 	};
@@ -207,8 +233,6 @@ OUTPUTS :
  */
 FUNC(Home) = {
 	params["_menu"];
-	private _allGroupsWithPlayers = []; 
-	{_allGroupsWithPlayers pushBackUnique str group _x} forEach allPlayers;
 	private _introST = "
 	<t align='center'>
 	<t valign='middle'>
@@ -222,12 +246,12 @@ FUNC(Home) = {
 	];
 	private _playerInfo1 = [
 		["_headerPlayer","RscText",0.08,0.05,"Player:",""]
-		,["_headerGroup","RscText",0.08,0.05,"Group:",""]
+		,["_headerGroup","RscText",0.08,0.05,"Flight:",""]
 		,["_headerSolo","RscText",0.08,0.05,"Solo:",""]
 	];
 	private _playerInfo2 = [
 		["_playerNameTitle","RscText",0.2,0.05,profileName,""]
-		,["_playerGroup","RscText",0.2,0.05,"Current Group",""]
+		,["_playerGroup","RscText",0.2,0.05,[name player] call EFUNC(core,getFlight),""]
 		,["_playerSolo","RscCheckBox",0.05,0.05,"",""]
 	];
 	private _playerInfo3 = [
@@ -240,16 +264,34 @@ FUNC(Home) = {
 		,["_playerTakeOffLanding","RscCheckBox",0.05,0.05,"",""]
 		,["_playerSlingLoading","RscCheckBox",0.05,0.05,"",""]
 	];
+	private _playerInfo5 = [
+		["_headerCAS","RscText",0.2,0.05,"CAS:",""]
+		,["_headerCAP","RscText",0.2,0.05,"CAP:",""]
+		,["_headerUAV","RscText",0.2,0.05,"UAV:",""]
+	];
+	private _playerInfo6 = [
+		["_playerCAS","RscCheckBox",0.05,0.05,"",""]
+		,["_playerCAP","RscCheckBox",0.05,0.05,"",""]
+		,["_playerUAV","RscCheckBox",0.05,0.05,"",""]
+	];
 	private _allPlayersInfo = [
-		["_allPlayersInfoTitle","RscText",0.4,0.05,"Players",""]
-		,["_allPlayersLB","RscListBox",0.4,0.4,"",""]
+		["_allPlayersInfoTitle","RscText",0.25,0.05,"Players",""]
+		,["_allPlayersLB","RscListBoxMulti",0.25,0.4,[],""]
 	];
 	private _editGroupInfo = [
-		["_editGroupTitle","RscText",0.4,0.05,"Edit Current Group(WIP)",""]
-		,["_editGroupList","RscCombo",0.4,0.05,_allGroupsWithPlayers,""]
-		,["_editGroupTitle","RscText",0.4,0.05,"Edit Current Group Name(WIP)",""]
-		,["_editGroupName","RscEdit",0.4,0.05,"",""]
-		,["_editGroupConfirm","RscButton",0.4,0.05,"Confirm",""]
+		["_flightList","RscXListBox",0.25,0.05,[] call EFUNC(core,allFlights),""]
+		,["_playerInFlightLB","RscListBox",0.25,0.34,[],""]
+		,["_playerToFlight","RscButton",0.25,0.05,"Move To Flight","[] call bad_core_fnc_moveToFlight"]
+	];
+	private _editGroupInfo2 = [
+		["_editFlightNameTitle","RscText",0.25,0.05,"Create/Edit FLT",""]
+		,["_editFlightName","RscEdit",0.25,0.05,"",""]
+		,["_editFlightLeaderTitle","RscText",0.25,0.05,"FLT Leader",""]
+		,["_editFlightLeader","RscCombo",0.25,0.05,[],""]
+		,["_editFlightPracticeTitle","RscText",0.25,0.05,"FLT Active Practice",""]
+		,["_flightPracticeListLB","RscCombo",0.25,0.05,["TOL","CAS"],""]
+		,["_editFlightDelete","RscButton",0.25,0.05,"Delete Group","[] call bad_core_fnc_deleteFlight"]
+		,["_editFlightConfirm","RscButton",0.25,0.05,"Confirm","[] call bad_core_fnc_createFlight"]
 	];
 	private _controlsButtons = [
 		["_homeRepair","RscButton",0.33,0.09,"Repair Aircraft","[] call bad_core_fnc_repair;"]
@@ -257,6 +299,7 @@ FUNC(Home) = {
 		,["_homeHeal","RscButton",0.33,0.09,"Full Heal","[] call bad_core_fnc_fullHeal;"]
 		,["_homeSsOff","RscButton",0.33,0.12,"Turn Off SafeStart","[false] remoteExecCall ['potato_safeStart_fnc_toggleSafeStart', 2];"]
 		,["_cleanUpWrecks","RscButton",0.33,0.09,"Clean up Wrecks and Empty Vics","[] call bad_core_fnc_cleanUpWrecks;"]
+		,["_cleanUpWrecks","RscButton",0.33,0.09,"Leave Current Flight","[name player] call bad_core_fnc_leaveCurrentFlight"]
 		,["_allowDamage","RscText",0.33,0.05,"God Mode (WIP)",""]
 		,["_allowDamage","RscCombo",0.33,0.05,["DISABLED","ENABLED"],""]
 		,["_endMission","RscButton",0.33,0.09,"End Mission","[west] remoteExecCall ['POTATO_adminMenu_fnc_endMission', 2];"]
@@ -264,14 +307,27 @@ FUNC(Home) = {
 	[_menu,_controlsTitle,-0.08,0.01,1] call FUNC(Verticle);
 	[_menu,_playerInfo1,-0.08,0.17,2] call FUNC(Verticle);
 	[_menu,_playerInfo2,0.01,0.17,3] call FUNC(Verticle);
-	[_menu,_playerInfo3,0.22,0.17,4] call FUNC(Verticle);
-	[_menu,_playerInfo4,0.43,0.17,5] call FUNC(Verticle);
+	[_menu,_playerInfo3,0.18,0.17,4] call FUNC(Verticle);
+	[_menu,_playerInfo4,0.39,0.17,5] call FUNC(Verticle);
 	[_menu,_allPlayersInfo,-0.08,0.4,6] call FUNC(Verticle);
-	[_menu,_editGroupInfo,0.33,0.4,7] call FUNC(Verticle);
-	[_menu,_controlsButtons,0.76,0.01,8] call FUNC(Verticle);
+	[_menu,_editGroupInfo,0.18,0.4,7] call FUNC(Verticle);
+	[_menu,_editGroupInfo2,0.45,0.4,8] call FUNC(Verticle);
+	[_menu,_controlsButtons,0.76,0.01,9] call FUNC(Verticle);
+	[_menu,_playerInfo5,0.45,0.17,10] call FUNC(Verticle);
+	[_menu,_playerInfo6,0.66,0.17,11] call FUNC(Verticle);
 	[] call EFUNC(core,getPracticeStatusAll);
 	private _display = findDisplay 9999;
+	[_display,1071,1070] call FUNC(flightMembersMenuList);
 	[_display,1061] call FUNC(playerList);
+	private _ctrlLB = _display displayCtrl(1081);
+	private _ctrlText = ctrlText _ctrlLB;
+	private _flightMembers = [_ctrlText] call EFUNC(core,flightMembersFlight);
+	{
+		_ctrlLB lbAdd _x;
+		_ctrlLB lbSetData [_forEachIndex,_x];
+	}forEach _flightMembers;
+
+	//Can be put in a forEach Loop. 
 	private _checkBoxAuto = _display displayCtrl (1050);
 	_checkBoxAuto ctrlAddEventHandler ["CheckedChanged",{[0,name player] call EFUNC(core,togglePractice);}];
 	private _checkBoxTOL = _display displayCtrl (1051);
@@ -280,7 +336,19 @@ FUNC(Home) = {
 	_checkBoxSling ctrlAddEventHandler ["CheckedChanged",{[2,name player] call EFUNC(core,togglePractice);}];
 	private _checkBoxSolo = _display displayCtrl (1032);
 	_checkBoxSolo ctrlAddEventHandler ["CheckedChanged",{[3,name player] call EFUNC(core,togglePractice);}];
+	private _checkBoxCAS = _display displayCtrl (1110);
+	_checkBoxCAS ctrlAddEventHandler ["CheckedChanged",{[4,name player] call EFUNC(core,togglePractice);}];
+	private _checkBoxCAP = _display displayCtrl (1111);
+	_checkBoxCAP ctrlAddEventHandler ["CheckedChanged",{[5,name player] call EFUNC(core,togglePractice);}];
+	private _checkBoxUAV = _display displayCtrl (1112);
+	_checkBoxUAV ctrlAddEventHandler ["CheckedChanged",{[6,name player] call EFUNC(core,togglePractice);}];
+	private _flightNameEdit = _display displayCtrl (1081);
+	_flightNameEdit ctrlAddEventHandler ["SetFocus",{(_this select 0) ctrlSetText "";}];
+	private _flightMemberList = _display displayCtrl (1070);
+	_flightMemberList ctrlAddEventHandler ["LBSelChanged",{[] call EFUNC(core,flightRefresh);}];
+	[] call EFUNC(core,flightRefresh);
 };
+
 /* 
 FUNCTION : SpawnAC : [] call bad_mainMenu_fnc_SpawnAC
 DESCRIPTION : General menu setup for the given selected menu. Called by activeMenu. 
@@ -292,7 +360,7 @@ FUNC(SpawnAC) = {
 	private _display = findDisplay 9999;
 	private _controlsListBox = [
 		["_vicListTitle","RscXListBox",0.4,0.05,["Helicopter","Plane"],""]
-		,["_vicListBox","RscListBox",0.4,1.01,"",""]
+		,["_vicListBox","RscListBox",0.4,1.01,[],""]
 	];
 	private _controlsVicInfo = [
 		["_vehiclePic","RscPictureKeepAspect",0.4,0.4,"",""]
@@ -459,6 +527,8 @@ FUNC(TakeOffLanding) = {
 	private _practiceStatus = [
 		["_practiceEnabled","RscText",0.34,0.05,"Takeoff Landing Practice Enabled:",""]
 		,["_playerAutoroation","RscCheckBox",0.05,0.05,"",""]
+		,["_soloEnabled","RscText",0.34,0.05,"Solo Practice Enabled:",""]
+		,["_playerSolo","RscCheckBox",0.05,0.05,"",""]
 	];
 	private _AOSetupTitleFrame = [
 		["_AOSetupTitle","RscText",0.15,0.05,"AO Options:",""]
@@ -518,17 +588,23 @@ FUNC(TakeOffLanding) = {
 	[_menu,_missionSetup2,0.30,0.69,9] call FUNC(Verticle);
 	[_menu,_rightFrame,0.76,0.01,10] call FUNC(Verticle);
 	private _status = [1,name player] call EFUNC(core,practiceStatus);
-	private _checkBox = ((findDisplay 9999) displayCtrl (1011));
+	private _checkBoxTOL = ((findDisplay 9999) displayCtrl (1011));
 	if (_status == 1) then {
-		_checkBox cbSetChecked true;
+		_checkBoxTOL cbSetChecked true;
 	} else {
-		_checkBox cbSetChecked false;
+		_checkBoxTOL cbSetChecked false;
 	};
-	{
-		private _ctrl = ((findDisplay 9999) displayCtrl (_x));
-	} forEach _settingICD;
-	private _checkBoxTOL = _display displayCtrl (1011);
-	_checkBoxTOL ctrlAddEventHandler ["CheckedChanged",{[1,name player] call EFUNC(core,togglePractice);}];};
+	private _checkBoxSolo = ((findDisplay 9999) displayCtrl (1013));
+	private _soloCurrentStatus = [3,name player] call EFUNC(core,practiceStatus);
+	if (_soloCurrentStatus == 0) then {
+			_checkBoxSolo cbSetChecked false;
+		} else {
+			_checkBoxSolo cbSetChecked true;
+	};
+	_checkBoxTOL ctrlAddEventHandler ["CheckedChanged",{[1,name player] call EFUNC(core,togglePractice);}];
+	_checkBoxSolo ctrlAddEventHandler ["CheckedChanged",{[3,name player] call EFUNC(core,togglePractice);}];
+};
+
 /* 
 FUNCTION : SlingLoading : [] call bad_mainMenu_fnc_SlingLoading
 DESCRIPTION : General menu setup for the given selected menu. Called by activeMenu. 

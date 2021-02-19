@@ -4,7 +4,7 @@
 		_veh setHitPointDamage ["HitEngine",_damageEng];
 		_veh setHitPointDamage ["HitVRotor",_damageTRot];
 }] call CBA_fnc_addEventHandler;
-GVAR(damageValues) = [0,0,50,30,0,0];
+GVAR(damageValues) = [1,0,50,30,0,0];
 /* 
 FUNCTION : soloActive - [] call bad_autorotation_fnc_soloActive;
 DESCRIPTION : Activates solo training for autorotation practice. 
