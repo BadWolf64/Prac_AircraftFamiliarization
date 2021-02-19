@@ -175,10 +175,10 @@ class Helipilot_F {
   uniform[] = {"CUP_U_B_BAF_DPM_Tshirt","CUP_U_B_BAF_DPM_S1_RolledUp"};
   backpack[] = {"B_AssaultPack_khk"};
   vest[] = {"CUP_V_BAF_Osprey_Mk2_DPM_Pilot"};
-  headgear[] = {"CUP_H_BAF_Helmet_Pilot"};
+  headgear[] = {"B_Kitbag_rgr"};
   weapons[] = {SMG};
   magazines[] = {SMG_MAG,CREW_GRENADES};
-  backpackItems[] = {RADIO_LR};
+  backpackItems[] = {RADIO_LR,ToolKit};
   items[] = {BASE_MEDICAL,TOOLS,LEADER_TOOLS,RADIO_MR};
   linkedItems[] = {LINKED,LEADER_LINKED};
 };
