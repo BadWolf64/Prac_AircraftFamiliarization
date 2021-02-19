@@ -2,11 +2,13 @@
 
 GVAR(eiForces) = [];
 
+GVAR(playerSettings) = [
+	"DISABLED"
+	,"ENABLED"
+];
 
 GVAR(PlayerSettingsTOL) = [
-	"CONTINIOUS" 	
-	,"DISABLED" 				
-	,"ENABLED" 				
+	"CONTINIOUS"				
 	,"OPEN"			
 	,"LZ EXACT + AO"		
 	,"DISABLED"				
@@ -21,8 +23,6 @@ FUNCTION : writeToPSTOL : [] call bad_core_fnc_writeToPSTOL
 DESCRIPTION : Take the settings that have ben set in the TOL menu and apply them to the GVAR(PlayerSettingsTOL)
 INPUTS :	Taken from TOL menu:
 	Practice Type : IDC = 1101
-	Teleport to AO : IDC = 1103
-	Auto Repair : IDC = 1105
 	Select AO Type : IDC = 1031
 	LZ Marked on map with : IDC = 1033
 	EI Presence : IDC = 1051
@@ -36,8 +36,6 @@ FUNC(writeToPSTOL) = {
 	private _display = findDisplay 9999;
 	private _IDCarray = [
 		1101
-		,1103
-		,1105
 		,1031
 		,1033
 		,1051
@@ -49,5 +47,31 @@ FUNC(writeToPSTOL) = {
 		private _index = lbCurSel (_display displayCtrl (_x));
 		private _value =  lbText [_x,_index];
 		GVAR(PlayerSettingsTOL) set [_forEachIndex,_value];
+	} forEach _IDCarray;
+};
+/* 
+FUNCTION : writeToPSTOL : [] call bad_core_fnc_writeToPSTOL
+DESCRIPTION : Take the settings that have ben set in the TOL menu and apply them to the GVAR(PlayerSettingsTOL)
+INPUTS :	Taken from TOL menu:
+	Practice Type : IDC = 1101
+	Select AO Type : IDC = 1031
+	LZ Marked on map with : IDC = 1033
+	EI Presence : IDC = 1051
+	Vehicle AI in AO : IDC = 1061
+	Amount of EI in AO : IDC = 1053
+	EI Difficulty : iDC = 1063
+OUTPUTS : Write to GVAR(PlayerSettingsTOL)
+*/
+FUNC(writeToPS) = {
+	params[];
+	private _display = findDisplay 9999;
+	private _IDCarray = [
+		1103
+		,1105
+	];
+	{
+		private _index = lbCurSel (_display displayCtrl (_x));
+		private _value =  lbText [_x,_index];
+		GVAR(PlayerSettings) set [_forEachIndex,_value];
 	} forEach _IDCarray;
 };

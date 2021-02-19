@@ -41,6 +41,9 @@ FUNC(getPracticeStatusAll) = {
 		,1051 
 		,1052 
 		,1032
+		,1110
+		,1111
+		,1112
 		];
 	private _player = name player;
     private _practiceStatus = missionNamespace getVariable "PV_playerPracticeStatus";
