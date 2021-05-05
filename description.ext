@@ -1,23 +1,25 @@
-//enableDebugConsole = 2;
-//EnableTargetDebug = 1;
-//allowFunctionsRecompile = 1;
-
 onLoadName = "Aircraft Familiarization";
-#include "CfgLoadouts.hpp"
+
+// BWMF Gear
+//Credits:headswe, Pabst, Zerith
+#include "cfg\CfgLoadouts.hpp"
+
+// Extended Event Handlers:
 #include "cfg\CfgEventHandlers.hpp"
+
+// Parameters
 #include "cfg\Params.hpp"
-#include "cfg\ACE_Settings.hpp"
-#include "bad\cfgFunctions.hpp"
-respawnDelay = 5; 
-bwmfDate = "2019/03/05"; 
+
+// GUI
+#include "gui\guiComponents.hpp"
+
+respawnDelay = 5; // wait 5 seconds to go to spec
+
+bwmfDate = "2021/03/22"; //Framework date
+
 class CfgDebriefingSections {
   class acex_killTracker {
     title = "ACEX Killed Events";
     variable = "acex_killTracker_outputText";
   };
-};
-class mainMenu {
-	idd = 9999;
-	movingEnable = false;
-	enableSimulation = true;
 };

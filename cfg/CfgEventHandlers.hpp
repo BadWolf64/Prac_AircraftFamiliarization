@@ -1,3 +1,4 @@
+//Extended Event Handlers:
 class Extended_InitPost_EventHandlers {
   class Car {
     class BWMF_NoBitchZone { init = "(_this select 0) allowCrewInImmobile true;"; };
@@ -15,5 +16,10 @@ class Extended_InitPost_EventHandlers {
   };
   class Ship_F {
     class BWMF_DisableThermals { init = "(_this select 0) disableTIEquipment true;"; };
+  };
+};
+class Extended_PostInit_EventHandlers {
+  class bad_function_compile {
+    init = "call compile preprocessFileLineNumbers 'XEH_postInit.sqf'";
   };
 };
